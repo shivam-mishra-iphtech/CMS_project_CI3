@@ -1,6 +1,6 @@
 <p align="center">
   <a href="#" target="_blank">
-    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400">
+    <img src="https://codeigniter.com/assets/images/ci-logo-big.png" width="400">
   </a>
 </p>
 
@@ -11,7 +11,7 @@
 
 ## 📌 About To-Do App
 
-This **To-Do App** is a simple and efficient task management application built using the Laravel framework. It helps users manage daily tasks through an intuitive interface.
+This **To-Do App** is a simple and efficient task management application built using the CodeIgniter 3 framework. It helps users manage daily tasks through an intuitive interface.
 
 ### 🔹 Key Features:
 
@@ -31,7 +31,7 @@ This **To-Do App** is a simple and efficient task management application built u
   - Display success and error messages.
 - **Database Integration:**
   - Uses MySQL for storing tasks.
-  - Laravel Eloquent ORM for database operations.
+  - CodeIgniter Active Record for database operations.
 - **Security Features:**
   - CSRF protection for form submissions.
   - Secure authentication (if user login is implemented).
@@ -59,29 +59,25 @@ Follow these steps to set up the project locally:
 
    ```bash
    composer install
-   npm install
    ```
 
-3. **Create a `.env` file and configure your database:**
+3. **Configure your database in `application/config/database.php`**
+
+4. **Run database migrations (if applicable):**
 
    ```bash
-   cp .env.example .env
-   php artisan key:generate
+   php index.php migrate
    ```
 
-4. **Set up the database and run migrations:**
+5. **Set base URL in `application/config/config.php`**
+
+6. **Run the development server:**
 
    ```bash
-   php artisan migrate
+   php -S localhost:8000 -t public
    ```
 
-5. **Run the development server:**
-
-   ```bash
-   php artisan serve
-   ```
-
-6. **Access the application:**
+7. **Access the application:**
 
    Open your browser and go to: [http://localhost:8000](http://localhost:8000)
 
@@ -98,4 +94,4 @@ For questions or support, reach out to **[your email]**.
 
 ---
 
-✅ *Built with Laravel & ❤️ Open Source!*
+✅ *Built with CodeIgniter 3 & ❤️ Open Source!*
