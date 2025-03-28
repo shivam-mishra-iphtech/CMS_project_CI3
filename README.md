@@ -1,102 +1,89 @@
-# CI Demo Project
+<p align="center">
+  <a href="#" target="_blank">
+    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400">
+  </a>
+</p>
 
-![CodeIgniter Logo](https://codeigniter.com/assets/images/ci-logo-big.png)
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Build-Passing-brightgreen.svg" alt="Build Status"></a>
+  <a href="#"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
+</p>
 
-## Overview
-**CI Demo Project** is a lightweight Content Management System (CMS) built with CodeIgniter 4. It provides essential CMS features, including user authentication, an admin panel, page management, a blog module, media management, and site settings.
+## 📌 About To-Do App
 
----
+This **To-Do App** is a simple and efficient task management application built using the Laravel framework. It helps users manage daily tasks through an intuitive interface.
 
-## Features
+### 🔹 Key Features:
 
-### 🔐 User Authentication (Login, Logout, Register)
-A secure authentication system to control access to the backend.
-- **User Registration**: Users can sign up by providing a username, email, and password. ✅
-- **User Login**: Users log in using their credentials. ✅
-- **Password Hashing**: Secure password storage using `password_hash()`. ✅
-- **Session Handling**: Sessions maintain logged-in users. ✅
-- **User Roles**:
-  - **Admin** – Full access to the CMS. ✅
-  - **Editor** – Can manage content but not settings.
-  - **User** – Can view content.
-- **User Logout**: Secure logout functionality. ✅
-
-### 🛠 Admin Panel (Dashboard & User Management)
-A backend panel for administrators to manage the system.
-- **Dashboard**:
-  - View total users, total posts, and total pages. ✅
-  - Recent activity logs.
-- **User Management**:
-  - Add, edit, update, and delete users. ✅
-  - Assign different roles to users.
-- **Authentication Controls**:
-  - Restrict non-admin users from accessing the admin panel.
-
-### 📄 Page Management (CRUD)
-Manage static pages such as About Us, Contact, and Terms & Conditions.
-- Create new pages (Title, Slug, Content, Status).
-- Edit and update existing pages.
-- Delete pages.
-- Manage published/draft status.
-- **SEO-Friendly URLs** (slug-based navigation).
-
-### 📝 Blog Module (Posts, Categories & Comments)
-A blog system where admins can publish articles.
-- **Post Management (CRUD)**: Create, Read, Update, Delete blog posts.
-- **Categories**: Assign posts to categories.
-- **Comments**: Allow users to comment on blog posts.
-- **SEO-Friendly URLs** (e.g., `/blog/my-first-post`).
-- **Published/Draft Status**.
-
-### 📂 Media Management (Upload Images & Files)
-Upload and manage media files.
-- Upload images, PDFs, and other files.
-- File validation (only allow specific formats).
-- Display uploaded images in blog posts/pages.
-- Store files in `/uploads/` directory.
-- Utilize **CodeIgniter 4’s File Uploading Library**.
-
-### ⚙️ Site Settings (Basic Configuration)
-Admins can configure basic site settings.
-- Site Title.
-- Site Description.
-- Contact Email.
-- Social Media Links.
-- Logo Upload.
+- **Task Management:**
+  - Add new tasks.
+  - Edit existing tasks.
+  - Delete tasks.
+  - Mark tasks as **Pending** or **Completed**.
+- **User-Friendly Interface:**
+  - Clean and responsive design using Bootstrap 5.
+  - Interactive UI with SweetAlert notifications.
+- **Real-Time Operations:**
+  - AJAX-based task search functionality.
+  - Instant updates without page reload.
+- **Validation & Error Handling:**
+  - Proper validation for form submissions.
+  - Display success and error messages.
+- **Database Integration:**
+  - Uses MySQL for storing tasks.
+  - Laravel Eloquent ORM for database operations.
+- **Security Features:**
+  - CSRF protection for form submissions.
+  - Secure authentication (if user login is implemented).
 
 ---
 
-## 🚀 Installation
+## 🎥 Project Demo
+
+[![To-Do App Demo Video](https://img.shields.io/badge/Watch%20Video-Demo-brightgreen)](https://www.loom.com/share/6fd7c1c2c8f1465da1b919900cc19185?sid=f9644177-5dd3-46f8-a24a-32c5c4b29819)
+
+---
+
+## 🚀 Installation & Setup
+
+Follow these steps to set up the project locally:
 
 1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/yourusername/ci-demo-project.git
+
+   ```bash
+   git clone https://github.com/yourusername/todo-app
+   cd todo-app
    ```
 
-2. **Navigate to the project directory:**
-   ```sh
-   cd ci-demo-project
-   ```
+2. **Install dependencies:**
 
-3. **Install dependencies:**
-   ```sh
+   ```bash
    composer install
+   npm install
    ```
 
-4. **Set up the `.env` file and configure your database.**
+3. **Create a `.env` file and configure your database:**
 
-5. **Run database migrations:**
-   ```sh
-   php spark migrate
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
    ```
 
-6. **Start the development server:**
-   ```sh
-   php spark serve
+4. **Set up the database and run migrations:**
+
+   ```bash
+   php artisan migrate
    ```
 
-7. **Access the application in your browser:**  
-   👉 [http://localhost:8080](http://localhost:8080)
+5. **Run the development server:**
+
+   ```bash
+   php artisan serve
+   ```
+
+6. **Access the application:**
+
+   Open your browser and go to: [http://localhost:8000](http://localhost:8000)
 
 ---
 
@@ -111,4 +98,4 @@ For questions or support, reach out to **[your email]**.
 
 ---
 
-✅ *Built with CodeIgniter 4 & ❤️ Open Source!*
+✅ *Built with Laravel & ❤️ Open Source!*
