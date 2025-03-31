@@ -144,7 +144,7 @@ class WebController extends CI_Controller {
         
         if (!$data['user']) {
             $this->session->set_flashdata('error', 'User not found!');
-            redirect('dashboard');  
+            redirect('index');  
             return; 
         }
     
@@ -225,5 +225,57 @@ class WebController extends CI_Controller {
             return FALSE;
         }
         return TRUE;
+    }
+    public function change_password() {
+        
+        $id = $this->input->post('user_id');
+        $current_password = $this->input->post('current_password');
+        $new_password = $this->input->post('password');
+        $confirm_password = $this->input->post('confirm_password');
+       
+        $this->form_validation->set_rules('user_id', 'User ID', 'required|numeric');
+        $this->form_validation->set_rules('current_password', 'Current Password', 'required');
+        $this->form_validation->set_rules('password', 'New Password', 'required|min_length[6]');
+        $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('WebController/user_profile/' . $id);
+            return;
+        }
+
+        // Fetch user details
+        $user = $this->UserModel->get_user_by_id($id);
+        if (!$user) {
+            $this->session->set_flashdata('error', 'User not found.');
+            redirect('WebController/user_profile/' . $id);
+            return;
+        }
+
+        // Verify current password
+        if (!password_verify($current_password, $user->password)) {
+            $this->session->set_flashdata('error', 'Current password is incorrect.');
+            redirect('WebController/user_profile/' . $id);
+            return;
+        }
+        if (password_verify($new_password, $user->password)) {
+            $this->session->set_flashdata('error', 'New password must be different from the old password.');
+            redirect('WebController/user_profile/' . $id);
+            return;
+        }
+        
+
+        // Hash new password
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+        // Update password
+        if ($this->UserModel->update_password($id, $hashed_password)) {
+            $this->session->set_flashdata('success', 'Password updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to update password.');
+        }
+
+        // Redirect back to user profile page
+        redirect('WebController/user_profile/' . $id);
     }
 }

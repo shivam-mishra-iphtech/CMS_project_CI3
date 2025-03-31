@@ -73,6 +73,15 @@ class UserModel extends CI_Model {
                           ->row();
         return $query ? $query->image : null;
     }
+    public function update_password($id, $hashed_password) {
+        $this->db->where('id', $id);
+        $this->db->set('password', $hashed_password);
+        
+        if ($this->db->update('user')) {
+            return $this->db->affected_rows() > 0; 
+        }
+        return false; 
+    }
     
     
 }

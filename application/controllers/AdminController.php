@@ -329,6 +329,225 @@ class AdminController extends CI_Controller {
         redirect('AdminController/user_profile/' . $id);
     }
 
+    public function add_post(){
+        $this->load->view('admin/add_post');
+    }
+    public function add_new_post() {
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Title', 'required');
+        $this->form_validation->set_rules('short_description', 'Short Description', 'required');
+        $this->form_validation->set_rules('content', 'Content', 'required');
+        $this->form_validation->set_rules('category', 'Category', 'required');
+    
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('admin/add_post');
+            return;
+        }
+    
+        $upload_path  = BASEPATH . '../public/postImages/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+        }
+    
+        $thumbnail_image = null;
+        $featured_image = null;
+    
+        // Handle Thumbnail Upload
+        if (!empty($_FILES['thumbnail_image']['name'])) {
+            $file_ext1 = pathinfo($_FILES['thumbnail_image']['name'], PATHINFO_EXTENSION);
+            $thumbnail_image = time() . '_' . uniqid() . '.' . $file_ext1;
+    
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 5048;
+            $config['file_name'] = $thumbnail_image;
+    
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+    
+            if (!$this->upload->do_upload('thumbnail_image')) {
+                $this->session->set_flashdata('error', $this->upload->display_errors());
+                redirect('AdminController/add_post');
+                return;
+            }
+        }
+    
+        // Handle Featured Image Upload
+        if (!empty($_FILES['Featured_image']['name'])) {
+            $file_ext2 = pathinfo($_FILES['Featured_image']['name'], PATHINFO_EXTENSION);
+            $featured_image = time() . '_' . uniqid() . '.' . $file_ext2;
+    
+            $config['file_name'] = $featured_image;
+            $this->upload->initialize($config);
+    
+            if (!$this->upload->do_upload('Featured_image')) {
+                $this->session->set_flashdata('error', $this->upload->display_errors());
+                redirect('AdminController/add_post');
+                return;
+            }
+        }
+    
+        // Prepare Data for Insertion
+        $data = [
+            'user_id'     => $this->input->post('user_id', TRUE),
+            'post_title'  => $this->input->post('title', TRUE),
+            'short_desc'  => json_encode($this->input->post('short_description', TRUE)),
+            'content'     => json_encode($this->input->post('content', TRUE)),
+            'category'    => $this->input->post('category', TRUE),
+            'thumbnail'   => $thumbnail_image,
+            'featured_image' => $featured_image,
+            'status'      => 1,
+        ];
+    
+        // Insert into Database
+        if ($this->AdminModel->add_new_post($data)) {
+            $this->session->set_flashdata('success', 'New post added successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Error in adding new post.');
+        }
+    
+        redirect('AdminController/add_post');
+    }
+    public function posts_list() {
+        // echo "test";die;
+        $data['posts'] = $this->AdminModel->get_all_posts(); // Fetch posts from the model
+        $this->load->view('admin/post_list', $data);// Pass data to the view
+    }
+    public function view_post($id) {
+        $data['post'] = $this->AdminModel->get_post_by_id($id); 
+        $this->load->view('admin/view_post', $data);
+    }
+    public function edit_post($id) {
+        $data['post'] = $this->AdminModel->get_post_by_id($id); 
+        $this->load->view('admin/edit_post', $data);
+    }
+    public function update_post() {
+        $post_id = $this->input->post('post_id', TRUE); // Corrected: Fetching post ID properly
+    
+        // Form Validation
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Title', 'required');
+        $this->form_validation->set_rules('short_description', 'Short Description', 'required');
+        $this->form_validation->set_rules('content', 'Content', 'required');
+        $this->form_validation->set_rules('category', 'Category', 'required');
+    
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('AdminController/edit_post/' . $post_id);
+            return;
+        }
+    
+        // Get Existing Post Data
+        $existing_post = $this->AdminModel->get_post_by_id($post_id);
+    
+        if (!$existing_post) {
+            $this->session->set_flashdata('error', 'Post not found.');
+            redirect('AdminController/posts_list');
+            return;
+        }
+    
+        $upload_path  = BASEPATH . '../public/postImages/';
+    
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+        }
+    
+        // Initialize File Uploads
+        $thumbnail_image = $existing_post->thumbnail;
+        $featured_image = $existing_post->featured_image;
+    
+        // Handle Thumbnail Image Upload
+        if (!empty($_FILES['thumbnail_image']['name'])) {
+            $file_ext1 = pathinfo($_FILES['thumbnail_image']['name'], PATHINFO_EXTENSION);
+            $thumbnail_image = time() . '_' . uniqid() . '.' . $file_ext1;
+    
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 5048;
+            $config['file_name'] = $thumbnail_image;
+    
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+    
+            if ($this->upload->do_upload('thumbnail_image')) {
+                // Delete old thumbnail if new one is uploaded
+                if (!empty($existing_post->thumbnail) && file_exists($upload_path . $existing_post->thumbnail)) {
+                    unlink($upload_path . $existing_post->thumbnail);
+                }
+            } else {
+                $this->session->set_flashdata('error', $this->upload->display_errors());
+                redirect('AdminController/edit_post/' . $post_id);
+                return;
+            }
+        }
+    
+        // Handle Featured Image Upload
+        if (!empty($_FILES['featured_image']['name'])) { // Fixed input name
+            $file_ext2 = pathinfo($_FILES['featured_image']['name'], PATHINFO_EXTENSION);
+            $featured_image = time() . '_' . uniqid() . '.' . $file_ext2;
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 5048;
+            $config['file_name'] = $featured_image;
+            $this->upload->initialize($config);
+    
+            if ($this->upload->do_upload('featured_image')) {
+                // Delete old featured image if new one is uploaded
+                if (!empty($existing_post->featured_image) && file_exists($upload_path . $existing_post->featured_image)) {
+                    unlink($upload_path . $existing_post->featured_image);
+                }
+            } else {
+                $this->session->set_flashdata('error', $this->upload->display_errors());
+                redirect('AdminController/edit_post/' . $post_id);
+                return;
+            }
+        }
+    
+        // Prepare Data for Update
+        $data = [
+            'user_id'        => $this->input->post('user_id', TRUE),
+            'post_title'     => $this->input->post('title', TRUE),
+            'short_desc'     => json_encode($this->input->post('short_description', TRUE)),
+            'content'        => json_encode($this->input->post('content', TRUE)),
+            'category'       => $this->input->post('category', TRUE),
+            'thumbnail'      => $thumbnail_image,
+            'featured_image' => $featured_image,
+        ];
+    
+        if ($this->AdminModel->update_post($post_id, $data)) {
+            $this->session->set_flashdata('success', 'Post updated successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Error updating post.');
+        }
+    
+        redirect('AdminController/edit_post/' . $post_id);
+    }
+    public function delete_post($post_id) {
+        $existing_post = $this->AdminModel->get_post_by_id($post_id);
+        if (!$existing_post) {
+            $this->session->set_flashdata('error', 'Post not found.');
+            redirect('AdminController/posts_list');
+            return;
+        }
+        $upload_path = FCPATH . 'public/postImages/';
+        if (!empty($existing_post->featured_image) && file_exists($upload_path . $existing_post->featured_image)) {
+            unlink($upload_path . $existing_post->featured_image);
+        }
+        if (!empty($existing_post->thumbnail) && file_exists($upload_path . $existing_post->thumbnail)) {
+            unlink($upload_path . $existing_post->thumbnail);
+        }
+        if ($this->AdminModel->delete_post($post_id)) {
+            $this->session->set_flashdata('success', 'Post deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete post. Please try again.');
+        }
+        redirect('AdminController/posts_list');
+    }
+    
+    
+    
+    
+
     
     
     

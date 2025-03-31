@@ -34,6 +34,7 @@ class AdminModel extends CI_Model {
         return $this->db->insert('user', $data);
     }
 
+
     /**
      * Register user (Alias for insert_user)
      */
@@ -99,6 +100,25 @@ class AdminModel extends CI_Model {
         }
         return false; 
     }
+    public function add_new_post($data) {
+        return $this->db->insert('posts', $data);
+    }
+    public function get_all_posts() {
+        $this->db->order_by('id', 'DESC'); 
+        return $this->db->get('posts')->result();
+    }
+    public function get_post_by_id($id) {
+        return $this->db->where('id', $id)->get('posts')->row();
+    }
+    public function update_post($id, $data) {
+        return $this->db->where('id', $id)->update('posts', $data);
+    }
+    public function delete_post($post_id) {
+        return $this->db->delete('posts', ['id' => $post_id]);
+    }
+
+
+    
     
 }
 ?>
