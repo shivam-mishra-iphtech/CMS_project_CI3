@@ -1,2 +1,1 @@
-# CMS_project_CI3
- 
+DEMO project
