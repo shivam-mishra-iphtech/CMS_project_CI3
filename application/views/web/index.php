@@ -1,10 +1,10 @@
-<?php include 'layouts/header.php';?>
+<?php include 'layouts/header.php'; ?>
 
 <style>
     /* Enhanced Custom CSS */
     .hero-section {
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.1)), 
-                    url('<?php echo base_url('public/banners/hero-bg.jpg'); ?>');
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
+            url('<?php echo base_url('public/banners/hero-bg.jpg'); ?>');
         background-size: cover;
         background-position: center;
         padding: 8rem 0;
@@ -21,7 +21,7 @@
 
     .feature-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
 
     .pricing-card {
@@ -52,24 +52,24 @@
         .hero-section {
             padding: 4rem 0;
         }
-        
+
         .display-4 {
             font-size: 2.5rem;
         }
-        
+
         .carousel-container {
             height: 40vh;
         }
-        
+
         .carousel-img {
             height: 40vh;
         }
-        
+
         .btn-lg {
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
         }
-        
+
         .trust-badges img {
             max-width: 80%;
         }
@@ -80,11 +80,11 @@
             width: 100%;
             margin: 10px 0;
         }
-        
+
         .feature-card {
             margin: 1rem 0;
         }
-        
+
         .pricing-card {
             margin: 1rem 0;
         }
@@ -112,45 +112,47 @@
             </div>
         </div>
     </div>
-
+    <?php
+    // echo "<pre>";
+    // print_r($latest_posts);
+    // echo "</pre>";
+    ?>
     <!-- Features Section -->
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-12 text-center mb-5">
-                <h2 class="display-6 mb-3">Why Choose Us?</h2>
+                <h2 class="display-6 mb-3">Latest Post</h2>
                 <p class="text-muted fs-5">Discover features designed to boost your productivity</p>
             </div>
-            
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="feature-card shadow">
-                    <h3 class="mb-3">Lightning Fast</h3>
-                    <p class="text-muted mb-4">Optimized infrastructure delivers 99.9% uptime</p>
-                    <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>" class="img-fluid rounded-3" alt="Performance">
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="feature-card shadow">
-                    <h3 class="mb-3">Lightning Fast</h3>
-                    <p class="text-muted mb-4">Optimized infrastructure delivers 99.9% uptime</p>
-                    <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>" class="img-fluid rounded-3" alt="Performance">
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="feature-card shadow">
-                    <h3 class="mb-3">Lightning Fast</h3>
-                    <p class="text-muted mb-4">Optimized infrastructure delivers 99.9% uptime</p>
-                    <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>" class="img-fluid rounded-3" alt="Performance">
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="feature-card shadow">
-                    <h3 class="mb-3">Lightning Fast</h3>
-                    <p class="text-muted mb-4">Optimized infrastructure delivers 99.9% uptime</p>
-                    <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>" class="img-fluid rounded-3" alt="Performance">
-                </div>
-            </div>
+            <?php
+            if (!empty($latest_posts)) {
+                foreach ($latest_posts as $latest_post) {
+                    ?>
+            <div class="col-12 col-md-6 col-lg-4">
 
-            
+                <div class="feature-card shadow">
+                    <h3 class="mb-3">
+                        <?php
+                            $content = strip_tags(htmlspecialchars_decode($latest_post->post_title));
+                            echo strlen($content) > 40 ? substr($content, 0, 40) . '...' : $content;
+                        ?>
+                    </h3>
+                    <p class="text-muted mb-4">
+                        <?php
+                            $content = strip_tags(htmlspecialchars_decode($latest_post->short_desc));
+                            echo strlen($content) > 80 ? substr($content, 0, 80) . '...' : $content;
+                        ?>
+                    </p>
+                    <a href="<?= site_url('WebController/view_post_by_id/'.$latest_post->id); ?>">
+                        <img src="<?php echo base_url('public/postImages/' . $latest_post->thumbnail ?? ''); ?>"
+                        class="img-fluid rounded-3" alt="Performance">
+                    </a>
+                </div>
+            </div>
+            <?php
+                }
+            }
+            ?>
         </div>
     </div>
 
@@ -162,20 +164,25 @@
                     <div id="platformCarousel" class="carousel slide h-100" data-bs-ride="carousel">
                         <div class="carousel-inner h-100">
                             <div class="carousel-item active h-100">
-                                <img src="<?php echo base_url('public/banners/logo3.jpg'); ?>" class="d-block w-100 carousel-img" alt="Dashboard">
+                                <img src="<?php echo base_url('public/banners/logo3.jpg'); ?>"
+                                    class="d-block w-100 carousel-img" alt="Dashboard">
                             </div>
                             <div class="carousel-item active h-100">
-                                <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>" class="d-block w-100 carousel-img" alt="Dashboard">
+                                <img src="<?php echo base_url('public/banners/logo7.jpg'); ?>"
+                                    class="d-block w-100 carousel-img" alt="Dashboard">
                             </div>
                             <div class="carousel-item active h-100">
-                                <img src="<?php echo base_url('public/banners/logo2.jpg'); ?>" class="d-block w-100 carousel-img" alt="Dashboard">
+                                <img src="<?php echo base_url('public/banners/logo2.jpg'); ?>"
+                                    class="d-block w-100 carousel-img" alt="Dashboard">
                             </div>
                             <!-- Add other carousel items -->
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#platformCarousel" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#platformCarousel"
+                            data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#platformCarousel" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#platformCarousel"
+                            data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         </button>
                     </div>
@@ -229,8 +236,6 @@
             <!-- Repeat for other pricing cards -->
         </div>
     </div>
-
-    <!-- Final CTA -->
     <div class="container-fluid bg-dark text-white py-5">
         <div class="container text-center">
             <div class="row justify-content-center">
@@ -247,4 +252,4 @@
     </div>
 </section>
 
-<?php include 'layouts/footer.php';?>
+<?php include 'layouts/footer.php'; ?>

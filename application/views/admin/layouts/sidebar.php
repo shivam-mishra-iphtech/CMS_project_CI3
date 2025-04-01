@@ -151,6 +151,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <!-- -------- add post --------- -->
 
                     <li class="nav-item mx-2">
@@ -163,15 +164,48 @@
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/posts_list')?>">
-                                    <i class="bi bi-list-task me-1 text-primary"></i>
+                                    <i class="bi bi-list-task me-2 text-primary"></i>
                                    Post List
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/add_post')?>">
-                                    <i class="bi bi-plus me-2 text-success"></i>
+                                    <i class="bi bi-plus  me-2 text-success"></i>
                                     Add Post
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                     <!-- ----------- add page ----------  -->
+                    <li class="nav-item mx-2">
+                        <a class="nav-link d-flex align-items-center page-toggle" href="#">
+                        <i class="bi bi-code-square fs-5 me-2"></i>
+                           Pages
+                            <i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul class="page-menu list-unstyled collapse">
+                            <li>
+                                <a class="dropdown-item py-2 px-4 d-flex align-items-center"
+                                    href="<?php echo site_url('AdminController/page_category')?>">
+                                    <i class="bi bi-bookmarks-fill me-2 text-primary"></i>
+                                   Pages Category
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-4 d-flex align-items-center"
+                                    href="<?php echo site_url('AdminController/posts_list')?>">
+                                    <i class="bi bi-list-task me-2 text-primary"></i>
+                                   Pages List
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-4 d-flex align-items-center"
+                                    href="<?php echo site_url('AdminController/add_page')?>">
+                                    <i class="bi bi-plus me-2 text-success"></i>
+                                    Add Page
                                 </a>
                             </li>
                         </ul>
@@ -188,7 +222,6 @@
                                 class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-4">13</span>
                         </div>
                     </li>
-
                 </ul>
                 <div class="mt-auto"></div>
                 <!-- User (md) -->
@@ -221,6 +254,14 @@
                 e.preventDefault();
                 const userMenu = document.querySelector(".post-menu");
                 userMenu.style.display = (userMenu.style.display === "block") ? "none" :
+                    "block";
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".page-toggle").addEventListener("click", function(e) {
+                e.preventDefault();
+                const userMenu = document.querySelector(".page-menu");
+                userMenu.style.display = (userMenu.style.display === "block") ? "none":
                     "block";
             });
         });

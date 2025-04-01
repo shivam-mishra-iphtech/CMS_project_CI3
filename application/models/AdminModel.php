@@ -116,6 +116,21 @@ class AdminModel extends CI_Model {
     public function delete_post($post_id) {
         return $this->db->delete('posts', ['id' => $post_id]);
     }
+    
+    public function add_page_category($data) {
+        return $this->db->insert('page_category', $data);
+    }
+    
+    public function get_page_category() {
+        $this->db->order_by('id', 'asc'); 
+        return $this->db->get('page_category')->result();
+    }
+    public function update_page_category($id, $data) {
+        return $this->db->where('id', $id)->update('page_category', $data);
+    }
+    public function delete_page_category($category_id) {
+        return $this->db->delete('page_category', ['id' => $category_id]);
+    }
 
 
     

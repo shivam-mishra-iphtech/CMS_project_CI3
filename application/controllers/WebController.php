@@ -17,7 +17,8 @@ class WebController extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('web/index');
+        $data['latest_posts']=$this->UserModel->get_latest_post();
+        $this->load->view('web/index', $data);
     }
 
     public function registration() {
@@ -38,33 +39,6 @@ class WebController extends CI_Controller {
                 'email' => $this->input->post('email', TRUE),
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
             ];
-    
-            // Handle Profile Image Upload
-            // if (!empty($_FILES['profile_image']['name'])) {
-            //     $upload_path = BASEPATH . '../public/userImage/';
-            //     if (!is_dir($upload_path)) {
-            //         mkdir($upload_path, 0777, true);
-            //     }
-    
-            //     $file_ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-            //     $unique_filename = time() . '_' . uniqid() . '.' . $file_ext;
-                
-            //     $config['upload_path'] = $upload_path;
-            //     $config['allowed_types'] = 'jpg|jpeg|png';
-            //     $config['max_size'] = 2048;
-            //     $config['file_name'] = $unique_filename;
-    
-            //     $this->load->library('upload', $config);
-            //     $this->upload->initialize($config);
-    
-            //     if ($this->upload->do_upload('profile_image')) {
-            //         $data['image'] = $unique_filename; // Save only the filename
-            //     } else {
-            //         $this->session->set_flashdata('error', $this->upload->display_errors());
-            //         redirect('WebController/registration');
-            //     }
-            // }
-    
             if ($this->UserModel->insert_user($data)) {
                 $this->session->set_flashdata('success', 'Registration successful. Please login.');
                 redirect('WebController/registration');
@@ -93,7 +67,6 @@ class WebController extends CI_Controller {
                     redirect('login');
                     return;
                 }
-
                 $userdata = [
                     'user_id'    => $user->id,
                     'user_name'  => $user->name,
@@ -277,5 +250,36 @@ class WebController extends CI_Controller {
 
         // Redirect back to user profile page
         redirect('WebController/user_profile/' . $id);
+    }
+    // public function view_post() {
+    //     // $data['latest_posts']=$this->UserModel->get_latest_post();
+    //     $this->load->view('web/posts');
+    // }
+    public function view_post_by_id($id) {
+        // Fetch the latest post by ID
+        $data['latest_post'] = $this->UserModel->get_post_by_id($id);
+    
+        // Check if the latest post exists
+        if (!empty($data['latest_post'])) {
+            // Get the category of the latest post
+            $post_category = $data['latest_post']->category;
+    
+            // Fetch related posts based on the category of the latest post
+            $data['related_posts'] = $this->UserModel->get_related_posts($id, $post_category);
+    
+            // Load the view and pass both latest_post and related_posts data
+            $this->load->view('web/posts', $data);
+        } else {
+            // If no post is found, show a 404 error
+            show_404();
+        }
+    }
+    
+    
+   
+    
+    public function view_page() {
+        // $data['latest_posts']=$this->UserModel->get_latest_post();
+        $this->load->view('web/pages');
     }
 }

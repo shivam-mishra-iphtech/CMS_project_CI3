@@ -5,9 +5,9 @@ $route['default_controller'] = 'WebController';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-// Custom Routes
-$route['register'] = 'WebController/registration';
-$route['add-user'] = 'WebController/add_user';
-$route['login'] = 'WebController/login';
-$route['logout'] = 'WebController/logout';
+// // Custom Routes
+// $route['register'] = 'WebController/registration';
+// $route['add-user'] = 'WebController/add_user';
+// $route['login'] = 'WebController/login';
+// $route['logout'] = 'WebController/logout';
 

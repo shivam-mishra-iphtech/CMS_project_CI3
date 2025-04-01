@@ -82,6 +82,24 @@ class UserModel extends CI_Model {
         }
         return false; 
     }
+    public function get_latest_post()
+    {
+        $this->db->where('category','1');
+        $this->db->where('status',1);
+        $this->db->order_by('id', 'DESC'); 
+        return $this->db->get('posts')->result();
+
+    }
+    
+    public function get_post_by_id($id) {
+        $this->db->where('status',1);
+        return $this->db->where('id', $id)->get('posts')->row();
+    }
+    public function get_related_posts($id, $category) {
+        return $this->db->where('status', 1)->where('id !=', $id)  
+            ->where('category', $category) ->get('posts')  ->result();  
+    }
+    
     
     
 }

@@ -1,3 +1,4 @@
+
 <?php include 'layouts/sidebar.php'; ?>
 
 <!-- Main Content -->
@@ -23,7 +24,7 @@
                                 <tr>
                                     <th class="">Title</th>
                                     <th class="text-center">Category</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Publish</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -63,13 +64,18 @@
                                             <?= $post->category == 1 ? 'Latest' : 'Trending'; ?>
                                         </span>
                                     </td>
-                                    <td class="text-end">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input custom-toggle" style="width:40px; height:20px;" type="checkbox" role="switch"
-                                            id="statusSwitch<?= $post->id; ?>"
-                                            <?= $post->status == 1 ? 'checked' : ''; ?>>
+                                    <td class="text-center align-middle">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input custom-toggle status-toggle"
+                                                    style="width:40px; height:20px;" type="checkbox" role="switch"
+                                                    id="statusSwitch<?= $post->id; ?>" data-id="<?= $post->id; ?>"
+                                                    <?= $post->status == 1 ? 'checked' : ''; ?>>
+                                            </div>
                                         </div>
                                     </td>
+
+                                    
 
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
@@ -114,4 +120,41 @@
     </header>
 </div>
 
+
 <?php include 'layouts/footer.php'; ?>
+<script>
+    $(document).ready(function() {
+        // Event listener for status toggle switch change
+        $('.status-toggle').change(function() {
+            let postId = $(this).data('id');  // Get the post ID
+            let status = $(this).prop('checked') ? 1 : 0;  // Determine new status
+
+            // Send AJAX request to update post status
+            $.ajax({
+                url: "<?= site_url('AdminController/update_post_status'); ?>",  // Update URL
+                type: "POST",  // POST request method
+                data: {
+                    post_id: postId,  // Send post ID
+                    status: status    // Send new status value (1 for active, 0 for inactive)
+                },
+                dataType: "json",  // Expecting a JSON response
+                success: function(response) {
+                    // Optionally handle any post-response actions (if needed)
+                    if (response.status === "success") {
+                        // Optional: You can use something else to notify the user if needed
+                        console.log("Status updated successfully!");
+                    } else {
+                        // Optional: Handle failure case
+                        console.log("Failed to update status.");
+                    }
+                },
+                error: function(xhr) {
+                    // If the AJAX request fails, you can still log or handle the error
+                    console.log("Something went wrong!");
+                }
+            });
+        });
+    });
+</script>
+
+

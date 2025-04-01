@@ -70,7 +70,7 @@
                 <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mb-4">
                     <h6 class="text-uppercase fw-bold mb-4">Resources</h6>
                     <p><a href="#contact" class="text-reset">Contact</a></p>
-                    <p><a href="#about" class="text-reset">About Us</a></p>
+                    <p><a href="<?php echo site_url('WebController/view_page')?>" class="text-reset">About Us</a></p>
                     <p><a href="#terms" class="text-reset">Terms & Conditions</a></p>
                     <p><a href="#policy" class="text-reset">Privacy Policy</a></p>
                 </div>

@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-12">
-                    <h1 class="h3 mb-0">Add New Post</h1>
+                    <h1 class="h3 mb-0">Add New Page</h1>
                 </div>
             </div>
         </div>
@@ -58,16 +58,12 @@
                     <div class="col-lg-8">
                         <input type="hidden" name="user_id" value=" <?php echo $this->session->userdata('user_id'); ?>">
                         <div class="mb-4">
-                            <label for="title" class="form-label fw-bold">Post Title</label>
+                            <label for="title" class="form-label fw-bold">Page Title</label>
                             <input type="text" class="form-control form-control-sm shadow-none" id="title" name="title"
-                                placeholder="Enter post title" required>
+                                placeholder="Enter page title" required>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="short_description" class="form-label fw-bold">Short Description</label>
-                            <textarea class="form-control shadow-none" id="short_description" name="short_description" rows="3"
-                                placeholder="Enter short description" required></textarea>
-                        </div>
+                        
 
                         <!-- Include CKEditor -->
                         <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
@@ -81,17 +77,24 @@
                         <script>
                             CKEDITOR.replace('content');
                         </script>
+                        <div class="mb-4">
+                            <label for="short_description" class="form-label fw-bold">Short Description</label>
+                            <textarea class="form-control shadow-none" id="short_description" name="short_description" rows="3"
+                                placeholder="Enter short description" required></textarea>
+                        </div>
                     </div>
 
                     <!-- Right Column -->
                     <div class="col-lg-4">
-                        <div class="card border mb-5">
+                        <div class="card border mb-3">
                             <div class="card-body">
-                                <h6 class="card-title fw-bold mb-3">Post Category</h6>
+                                <h6 class="card-title fw-bold mb-3">Page Category</h6>
                                 <select class="form-select select2 form-control-sm shadow-none" name="category" required>
                                     <option value="">Select Category</option>
-                                    <option value="1">Latest Post</option>
-                                    <option value="2">Trending Post</option>
+                                    <option value="1">About Us</option>
+                                    <option value="2">Term & Condition</option>
+                                    <option value="2">Privacy policy</option>
+
                                 </select>
                             </div>
                         </div>
