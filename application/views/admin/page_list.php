@@ -2,16 +2,16 @@
 <?php include 'layouts/sidebar.php'; ?>
 
 <!-- Main Content -->
-<div class="d-flex flex-column flex-grow-1 h-100 overflow-hidden">
+<div class="d-flex flex-column flex-grow-1 h-100 ">
     <?php include 'layouts/header.php'; ?>
 
     <!-- Header Section -->
     <header class="bg-surface-primary border-bottom py-3">
         <div class="container-fluid">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h4 mb-0">Posts List</h1>
-                <a href="<?= site_url('AdminController/add_post'); ?>" class="btn btn-primary btn-sm">
-                    <i class="bi bi-plus-lg "></i>Add New Post
+                <h1 class="h4 mb-0">Page List</h1>
+                <a href="<?= site_url('AdminController/add_page'); ?>" class="btn btn-primary btn-sm">
+                    <i class="bi bi-plus-lg "></i>Add New Page
                 </a>
             </div>
 
@@ -19,7 +19,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table  class="table table-hover align-middle mb-0">
+                        <table id="pageListTable"  class="table table-hover align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
                                     <th class="">Title</th>
@@ -29,14 +29,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!empty($posts)) : ?>
-                                <?php foreach ($posts as $post) : ?>
+                                <?php if (!empty($pages)) : ?>
+                                <?php foreach ($pages as $page) : ?>
                                 <tr class="border-top">
                                     <td class="ps-3" style="max-width: 400px;">
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="square-thumbnail">
-                                                <?php if (!empty($post->thumbnail)) : ?>
-                                                <img src="<?= base_url('public/postImages/' . $post->thumbnail); ?>"
+                                                <?php if (!empty($page->image_1)) : ?>
+                                                <img src="<?= base_url('public/pageImages/' . $page->image_1); ?>"
                                                     alt="Thumbnail" class="img-fluid rounded"
                                                     style="width: 50px; height: 50px; object-fit: cover;">
                                                 <?php else: ?>
@@ -48,11 +48,11 @@
                                             </div>
                                             <div>
                                                 <h6 class="mb-0 text-truncate" style="max-width: 300px;">
-                                                    <?= htmlspecialchars($post->post_title); ?></h6>
+                                                    <?= htmlspecialchars($page->page_title); ?></h6>
                                                 <p class="text-muted mb-0 small text-truncate"
                                                     style="max-width: 300px;">
                                                     <?php
-                                                        $content = strip_tags(htmlspecialchars_decode($post->content));
+                                                        $content = strip_tags(htmlspecialchars_decode($page->page_content));
                                                         echo strlen($content) > 40 ? substr($content, 0, 40) . '...' : $content;
                                                     ?>
                                                 </p>
@@ -60,8 +60,8 @@
                                         </div>
                                     </td>
                                     <td class="text-center small">
-                                        <span class="badge bg-info bg-opacity-10 text-info">
-                                            <?= $post->category == 1 ? 'Latest' : 'Trending'; ?>
+                                        <span style="font-size:13px ; color: green;" class="badge bg-info bg-opacity-10">
+                                            <?= $page->category_name  ?>
                                         </span>
                                     </td>
                                     <td class="text-center align-middle">
@@ -69,8 +69,8 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input custom-toggle status-toggle"
                                                     style="width:40px; height:20px;" type="checkbox" role="switch"
-                                                    id="statusSwitch<?= $post->id; ?>" data-id="<?= $post->id; ?>"
-                                                    <?= $post->status == 1 ? 'checked' : ''; ?>>
+                                                    id="statusSwitch<?= $page->id; ?>" data-id="<?= $page->id; ?>"
+                                                    <?= $page->status == 1 ? 'checked' : ''; ?>>
                                             </div>
                                         </div>
                                     </td>
@@ -79,15 +79,15 @@
 
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <a href="<?= site_url('AdminController/view_post/' . $post->id); ?>"
+                                            <a href="<?= site_url('AdminController/view_post/' . $page->id); ?>"
                                                 class="btn btn-outline-primary " title="View">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="<?= site_url('AdminController/edit_post/'.$post->id); ?>"
+                                            <a href="<?= site_url('AdminController/edit_post/'.$page->id); ?>"
                                                 class="btn btn-outline-warning " title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="<?= site_url('AdminController/delete_post/'.$post->id); ?>"
+                                            <a id="delete_page" data-id="<?=$page->id?>" href=""
                                                 class="btn btn-outline-danger  btn-delete-user" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </a>
@@ -111,7 +111,7 @@
                 <!-- Table Footer -->
                 <div class="card-footer bg-light border-0 py-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted small">Showing <?= count($posts); ?> entries</span>
+                        <span class="text-muted small">Showing <?= count($pages); ?> entries</span>
                        
                     </div>
                 </div>
@@ -131,7 +131,7 @@
 
            
             $.ajax({
-                url: "<?= site_url('AdminController/update_post_status'); ?>",  
+                url: "<?= site_url('AdminController/update_page_status'); ?>",  
                 type: "POST",  
                 data: {
                     post_id: postId,  
@@ -155,6 +155,62 @@
             });
         });
     });
+    
 </script>
+<script>
+    $(document).ready(function() {
+    $(document).on('click', '#delete_page', function(e) {
+        e.preventDefault(); // Prevent the default anchor action
+        
+        let pageId = $(this).data('id');
+        // alert(pageId)  
+        if (!pageId) {
+            console.log("Page ID is missing!");
+            return;
+        }
+            $.ajax({
+                url: "<?= site_url('AdminController/delete_page'); ?>",  
+                type: "POST",  
+                data: { page_id: pageId },
+                dataType: "json",  
+                success: function(response) {
+                    if (response.status === "success") {
+                        console.log("Page deleted successfully!");
+                        // location.reload();
+                    } else {
+                        console.log("Failed to delete the page!");
+                    }
+                },
+                error: function(xhr) {
+                    console.log("Something went wrong!");
+                }
+            });
+        
+    });
+});
+
+    
+</script>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#pageListTable').DataTable({
+            "dom": '<"dt-buttons"Bf><"clear">lirtp',
+            "paging": true,
+            "autoWidth": true,
+            "buttons": [
+                'colvis',
+                'copyHtml5',
+                'csvHtml5',
+                'excelHtml5',
+                'pdfHtml5',
+                'print'
+            ]
+        });
+    });
+</script>
+
 
 

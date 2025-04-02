@@ -4,7 +4,7 @@
     /* Enhanced Custom CSS */
     .hero-section {
         background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
-            url('<?php echo base_url('public/banners/hero-bg.jpg'); ?>');
+            url('https://images.nightcafe.studio/jobs/pWvU3RiBUozZlsU0u3SU/pWvU3RiBUozZlsU0u3SU--0--7yn3m.jpg?tr=w-1600,c-at_max');
         background-size: cover;
         background-position: center;
         padding: 8rem 0;
@@ -105,7 +105,7 @@
                             <a href="#" class="btn btn-outline-light btn-lg px-5 py-3">Watch Demo</a>
                         </div>
                         <!-- <div class="trust-badges mt-5">
-                            <img src="<?php echo base_url('public/banners/logo2.jpg'); ?>" class="img-fluid" style="max-height: 45px" alt="Trusted companies">
+                            <img src="<?php echo base_url('public/banners/video1.mov'); ?>" class="img-fluid" style="max-height: 45px" alt="Trusted companies">
                         </div> -->
                     </div>
                 </div>

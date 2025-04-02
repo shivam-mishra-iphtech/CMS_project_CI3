@@ -196,7 +196,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
-                                    href="<?php echo site_url('AdminController/posts_list')?>">
+                                    href="<?php echo site_url('AdminController/page_list')?>">
                                     <i class="bi bi-list-task me-2 text-primary"></i>
                                    Pages List
                                 </a>

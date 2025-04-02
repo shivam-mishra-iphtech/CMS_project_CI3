@@ -541,7 +541,7 @@ class AdminController extends CI_Controller
             redirect('AdminController/posts_list');
             return;
         }
-        $upload_path = FCPATH . 'public/postImages/';
+        $upload_path = BASEPATH . '../public/postImages/';
         if (!empty($existing_post->featured_image) && file_exists($upload_path . $existing_post->featured_image)) {
             unlink($upload_path . $existing_post->featured_image);
         }
@@ -570,10 +570,7 @@ class AdminController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid post ID!"]);
         }
     }
-    public function add_page()
-    {
-        $this->load->view('admin/add_page');
-    }
+    
     public function page_category()
     {
         $data['categories'] = $this->AdminModel->get_page_category();
@@ -581,41 +578,41 @@ class AdminController extends CI_Controller
         
     }
     public function add_page_category()
-{
-    $this->form_validation->set_rules('user_id', 'User ID', 'required');
-    $this->form_validation->set_rules('title', 'Category Name', 'required|trim');
+    {
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Category Name', 'required|trim');
 
-    if ($this->form_validation->run() == FALSE) {
-        $this->session->set_flashdata('error', validation_errors());
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('AdminController/page_category');
+            return;
+        }
+
+        $category_id = $this->input->post('id'); // Hidden input for editing
+
+        $data = [
+            'user_id' => $this->input->post('user_id', TRUE),
+            'category_name' => $this->input->post('title', TRUE),
+        ];
+
+        if (!empty($category_id)) {
+            // Update category
+            if ($this->AdminModel->update_page_category($category_id, $data)) {
+                $this->session->set_flashdata('success', 'Category updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error updating category.');
+            }
+        } else {
+            // Insert new category
+            if ($this->AdminModel->add_page_category($data)) {
+                $this->session->set_flashdata('success', 'New page category added successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error in adding new category.');
+            }
+        }
+
         redirect('AdminController/page_category');
-        return;
     }
-
-    $category_id = $this->input->post('id'); // Hidden input for editing
-
-    $data = [
-        'user_id' => $this->input->post('user_id', TRUE),
-        'category_name' => $this->input->post('title', TRUE),
-    ];
-
-    if (!empty($category_id)) {
-        // Update category
-        if ($this->AdminModel->update_page_category($category_id, $data)) {
-            $this->session->set_flashdata('success', 'Category updated successfully.');
-        } else {
-            $this->session->set_flashdata('error', 'Error updating category.');
-        }
-    } else {
-        // Insert new category
-        if ($this->AdminModel->add_page_category($data)) {
-            $this->session->set_flashdata('success', 'New page category added successfully.');
-        } else {
-            $this->session->set_flashdata('error', 'Error in adding new category.');
-        }
-    }
-
-    redirect('AdminController/page_category');
-}
 
     public function delete_page_category($id)
     {
@@ -626,6 +623,160 @@ class AdminController extends CI_Controller
         }
         redirect('AdminController/page_category');
     }
+    public function add_page()
+    {   $data['categories'] = $this->AdminModel->get_page_category();
+        $this->load->view('admin/add_page' , $data);
+
+    }
+    public function add_new_page()
+    {
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Title', 'required');
+        $this->form_validation->set_rules('content', 'Content', 'required');
+        $this->form_validation->set_rules('short_description', 'Short Description', 'required');
+        $this->form_validation->set_rules('category', 'Category', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode(['status' => 'error', 'message' => validation_errors()]);
+            return;
+        }
+
+        $upload_path = BASEPATH . '../public/pageImages/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+        }
+
+        $image_1 = null;
+        $image_2 = null;
+
+        // Handle Thumbnail Upload
+        if (!empty($_FILES['image_1']['name'])) {
+            $file_ext1 = pathinfo($_FILES['image_1']['name'], PATHINFO_EXTENSION);
+            $image_1 = time() . '_' . uniqid() . '.' . $file_ext1;
+
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 5048;
+            $config['file_name'] = $image_1;
+
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            if (!$this->upload->do_upload('image_1')) {
+                echo json_encode(['status' => 'error', 'message' => $this->upload->display_errors()]);
+                return;
+            }
+        }
+
+        if (!empty($_FILES['image_2']['name'])) {
+            $file_ext1 = pathinfo($_FILES['image_2']['name'], PATHINFO_EXTENSION);
+            $image_2 = time() . '_' . uniqid() . '.' . $file_ext1;
+
+            $config['upload_path'] = $upload_path;
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['max_size'] = 5048;
+            $config['file_name'] = $image_2;
+
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            if (!$this->upload->do_upload('image_2')) {
+                echo json_encode(['status' => 'error', 'message' => $this->upload->display_errors()]);
+                return;
+            }
+        }
+
+        // Prepare Data for Insertion
+        $data = [
+            'user_id'        => $this->input->post('user_id', TRUE),
+            'page_title'     => $this->input->post('title', TRUE),
+            'page_content'   => json_encode($this->input->post('content', TRUE)),
+            'short_desc'     => json_encode($this->input->post('short_description', TRUE)),
+            'page_category'  => $this->input->post('category', TRUE),
+            'image_1'        => $image_1,
+            'image_2'        => $image_2,
+        ];
+
+        // Insert into Database
+        if ($this->AdminModel->add_new_page($data)) {
+            echo json_encode(['status' => 'success', 'message' => 'New page added successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Error in adding new page.']);
+        }
+    }
+    public function page_list()
+    {
+        $data['pages'] = $this->AdminModel->get_all_page();
+
+        if (!empty($data['pages'])) {
+            foreach ($data['pages'] as &$page) {
+                if (!empty($page->page_category)) {
+                    $this->db->where('id', $page->page_category);
+                    $query = $this->db->get('page_category'); // Assuming 'categories' is the correct table name
+                    $category = $query->row(); // Fetch single row
+                    
+                    if ($category) {
+                        $page->category_name = $category->category_name; // Assuming 'name' is the category column
+                    } else {
+                        $page->category_name = 'Unknown';
+                    }
+                }
+            }
+        }
+
+        $this->load->view('admin/page_list', $data);
+    }
+
+    public function update_page_status()
+    {
+        $post_id = $this->input->post('post_id');
+
+        $status = $this->input->post('status');
+
+        if (!empty($post_id)) {
+            $this->db->where('id', $post_id);
+            $this->db->update('pages', ['status' => $status]);
+
+            echo json_encode(["status" => "success", "message" => "Page status updated successfully!"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Invalid page ID!"]);
+        }
+    }
+    public function delete_page()
+    {
+        $page_id = $this->input->post('page_id');
+        if (!$page_id) {
+            echo json_encode(["status" => "error", "message" => "Invalid request"]);
+            exit;
+        }
+        $existing_page = $this->AdminModel->get_page_by_id($page_id);
+        if (!$existing_page) {
+            echo json_encode(["status" => "error", "message" => "Page not found"]);
+            exit;
+        }
+        $upload_path = BASEPATH . '../public/pageImages/';
+
+        if (!empty($existing_page->image_2) && file_exists($upload_path . $existing_page->image_2)) {
+            unlink($upload_path . $existing_page->image_2);
+        }
+        if (!empty($existing_page->image_1) && file_exists($upload_path . $existing_page->image_1)) {
+            unlink($upload_path . $existing_page->image_1);
+        }
+        if ($this->AdminModel->delete_page($page_id)) {
+            echo json_encode(["status" => "success", "message" => "Page deleted successfully!"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to delete page."]);
+        }
+        exit;
+    }
+
+
+
+    
+
+
 
 
 

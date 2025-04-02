@@ -85,7 +85,7 @@ class WebController extends CI_Controller {
                 }
             } else {
                 $this->session->set_flashdata('error', 'Invalid email or password.');
-                redirect('login');
+                $this->load->view('web/login');
             }
         }
     }
@@ -93,7 +93,7 @@ class WebController extends CI_Controller {
     public function logout() {
         $this->session->unset_userdata(['user_id', 'user_name', 'user_email', 'user_image', 'logged_in']);
         $this->session->set_flashdata('success', 'You have been logged out successfully.');
-        redirect('login');
+        $this->load->view('web/login');
     }
 
     public function login() {

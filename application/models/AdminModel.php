@@ -133,6 +133,25 @@ class AdminModel extends CI_Model {
     }
 
 
+    //    ------------- page Model fn --------------
+
+    public function add_new_page($data) {
+        return $this->db->insert('pages', $data);
+    }
+    public function get_all_page() {
+        $this->db->order_by('id', 'DESC'); 
+        return $this->db->get('pages')->result();
+    }
+    public function delete_page($page_id) {
+         
+        return $this->db->delete('pages', ['id' => $page_id]);
+    }
+    public function get_page_by_id($id) {
+
+        return $this->db->where('id', $id)->get('pages')->row();
+    }
+
+
     
     
 }
