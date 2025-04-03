@@ -130,9 +130,9 @@
                     <!-- Users Expanding Menu -->
                     <li class="nav-item mx-2">
                         <a class="nav-link d-flex align-items-center user-toggle" href="#">
-                            <i class="bi bi-people fs-5 me-2"></i>
+                            <i class="bi bi-people fs-5 me-2 me-0"></i>
                             Users
-                            <i class="bi bi-chevron-down ms-auto"></i>
+                            <i  class="bi bi-chevron-down  ms-auto"></i>
                         </a>
                         <ul class="user-menu list-unstyled collapse">
                             <li>
@@ -210,6 +210,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia/1')?>">
+                        <i class="bi bi-globe2 fs-5 me-2"></i>
+                            Social Mediad
+                        </a>
+                    </li>
                 </ul>
 
                 <hr class="navbar-divider my-5 opacity-20">
@@ -264,5 +270,13 @@
                 userMenu.style.display = (userMenu.style.display === "block") ? "none":
                     "block";
             });
+        }); document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".media-toggle").addEventListener("click", function(e) {
+                e.preventDefault();
+                const userMenu = document.querySelector(".media-menu");
+                userMenu.style.display = (userMenu.style.display === "block") ? "none":
+                    "block";
+            });
         });
+         
     </script>

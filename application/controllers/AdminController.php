@@ -624,6 +624,7 @@ class AdminController extends CI_Controller
         redirect('AdminController/page_category');
     }
     public function add_page()
+
     {   $data['categories'] = $this->AdminModel->get_page_category();
         $this->load->view('admin/add_page' , $data);
 
@@ -744,6 +745,114 @@ class AdminController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid page ID!"]);
         }
     }
+    public function edit_page($id){
+        $data['categories'] = $this->AdminModel->get_page_category();
+        $data['page']=$this->AdminModel->get_page_by_id($id);
+        $this->load->view('admin/edit_page',$data);
+    }
+    public function update_page()
+    {
+        $page_id = $this->input->post('page_id', TRUE);
+
+        // Validation Rules
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Title', 'required');
+        $this->form_validation->set_rules('short_description', 'Short Description', 'required');
+        $this->form_validation->set_rules('content', 'Content', 'required');
+        $this->form_validation->set_rules('category', 'Category', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode(['status' => 'error', 'message' => trim(validation_errors())]);
+            return;
+        }
+
+        // Check if page exists
+        $existing_page = $this->AdminModel->get_page_by_id($page_id);
+        if (!$existing_page) {
+            echo json_encode(['status' => 'error', 'message' => 'Page not found!']);
+            return;
+        }
+
+        // Define upload path
+        $upload_path = BASEPATH . '../public/pageImages/';
+
+        // Create directory if not exists
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+        }
+
+        $image_1 = $existing_page->image_1;
+        $image_2 = $existing_page->image_2;
+
+        // Load Upload Library
+        $this->load->library('upload');
+
+        // Handle Image 1 Upload
+        if (!empty($_FILES['image_1']['name'])) {
+            $file_ext1 = pathinfo($_FILES['image_1']['name'], PATHINFO_EXTENSION);
+            $image_1 = time() . '_' . uniqid() . '.' . $file_ext1;
+
+            $config = [
+                'upload_path'   => $upload_path,
+                'allowed_types' => 'jpg|jpeg|png',
+                'max_size'      => 5048,
+                'file_name'     => $image_1
+            ];
+
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('image_1')) {
+                if (!empty($existing_page->image_1) && file_exists($upload_path . $existing_page->image_1)) {
+                    unlink($upload_path . $existing_page->image_1);
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => $this->upload->display_errors()]);
+                return;
+            }
+        }
+
+        
+        if (!empty($_FILES['image_2']['name'])) {
+            $file_ext2 = pathinfo($_FILES['image_2']['name'], PATHINFO_EXTENSION);
+            $image_2 = time() . '_' . uniqid() . '.' . $file_ext2;
+
+            $config = [
+                'upload_path'   => $upload_path,
+                'allowed_types' => 'jpg|jpeg|png',
+                'max_size'      => 5048,
+                'file_name'     => $image_2
+            ];
+            $this->upload->initialize($config);
+
+            if ($this->upload->do_upload('image_2')) {
+                if (!empty($existing_page->image_2) && file_exists($upload_path . $existing_page->image_2)) {
+                    unlink($upload_path . $existing_page->image_2);
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => $this->upload->display_errors()]);
+                return;
+            }
+        }
+
+        // Prepare Data for Update
+        $data = [
+            'user_id'       => $this->input->post('user_id', TRUE),
+            'page_title'    => $this->input->post('title', TRUE),
+            'page_content'  => json_encode($this->input->post('content', TRUE)),
+            'short_desc'    => json_encode($this->input->post('short_description', TRUE)),
+            'page_category' => $this->input->post('category', TRUE),
+            'image_1'       => $image_1,
+            'image_2'       => $image_2,
+        ];
+
+        // Update Page
+        if ($this->AdminModel->update_page($page_id, $data)) {
+            echo json_encode(['status' => 'success', 'message' => 'Page updated successfully.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Page update failed!']);
+        }
+    }
+
     public function delete_page()
     {
         $page_id = $this->input->post('page_id');
@@ -771,6 +880,91 @@ class AdminController extends CI_Controller
         }
         exit;
     }
+    public function view_page($id){
+        $data['categories'] = $this->AdminModel->get_page_category();
+        $data['page']=$this->AdminModel->get_page_by_id($id);
+        $this->load->view('admin/view_page',$data);
+    }
+    public function social_meadia() 
+    {
+        $data['media_icons'] = $this->AdminModel->get_media_icons();
+        $data['social_media'] = $this->AdminModel->get_social_media();
+    
+        if (!empty($data['social_media'])) {
+            foreach ($data['social_media'] as $social_media) {
+                if (!empty($social_media->social_media_id)) {
+                    $this->db->where('id', $social_media->social_media_id);
+                    $query = $this->db->get('social_media_icons'); // Fetch corresponding media icon
+    
+                    $media_icons = $query->row(); // Fetch single row
+    
+                    if ($media_icons) {
+                        $social_media->media_name  = $media_icons->media_name;
+                        $social_media->icon_color  = $media_icons->icon_color;
+                        $social_media->icon_class  = $media_icons->icon_class;
+                        $social_media->media_icon_id  = $media_icons->id;
+                    } else {
+                        $social_media->media_name  = 'Unknown';
+                        $social_media->icon_color  = 'Unknown';
+                        $social_media->icon_class  = 'Unknown';
+                    }
+                }
+            }
+        }
+    
+        $this->load->view('admin/social_media', $data);
+    }
+    
+    // INSERT INTO `social_media`(`id`, `user_id`, `social_media_name`, `media_link`, `media_icon`, `icon_color`, `status`, `created_at`, `updated_at`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]','[value-7]','[value-8]','[value-9]')
+    public function save_social_media()
+    {
+        // Validate form inputs
+        $this->form_validation->set_rules('user_id', 'User ID', 'required|integer');
+        $this->form_validation->set_rules('media_icon_id', 'Media Platform', 'required|integer');
+        $this->form_validation->set_rules('media_link', 'Media Link', 'required|valid_url');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('AdminController/social_meadia');
+            return;
+        }
+
+        // Get media icon details from database
+        $media_icon = $this->AdminModel->get_media_icon_by_id($this->input->post('media_icon_id', TRUE));
+        
+        if (!$media_icon) {
+            $this->session->set_flashdata('error', 'Invalid media platform selected');
+            redirect('AdminController/social_meadia');
+            return;
+        }
+
+        // Prepare data for insertion/update
+        $data = [
+            'user_id' => $this->input->post('user_id', TRUE),
+            'social_media_id' => $this->input->post('media_icon_id', TRUE),
+            'media_link' => $this->input->post('media_link', TRUE),
+            // Add additional fields if needed
+        ];
+
+        $social_media_id = $this->input->post('id', TRUE);
+
+        try {
+            if (!empty($social_media_id)) {
+                // Update existing record
+                $this->AdminModel->update_social_media($social_media_id, $data);
+                $this->session->set_flashdata('success', 'Social media updated successfully.');
+            } else {
+                // Create new record
+                $this->AdminModel->add_social_media($data);
+                $this->session->set_flashdata('success', 'Social media added successfully.');
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error', 'Database error: ' . $e->getMessage());
+        }
+
+        redirect('AdminController/social_meadia');
+    }
+
 
 
 

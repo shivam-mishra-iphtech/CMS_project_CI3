@@ -72,9 +72,7 @@ class AdminModel extends CI_Model {
     
     
 
-    /**
-     * Delete a user by ID
-     */
+   
     public function delete_user($id) {
         return $this->db->delete('user', ['id' => $id]);
     }
@@ -100,6 +98,8 @@ class AdminModel extends CI_Model {
         }
         return false; 
     }
+    //----------------- Post model ------------------
+
     public function add_new_post($data) {
         return $this->db->insert('posts', $data);
     }
@@ -116,7 +116,7 @@ class AdminModel extends CI_Model {
     public function delete_post($post_id) {
         return $this->db->delete('posts', ['id' => $post_id]);
     }
-    
+    //-------------- page category model-----------------
     public function add_page_category($data) {
         return $this->db->insert('page_category', $data);
     }
@@ -147,8 +147,37 @@ class AdminModel extends CI_Model {
         return $this->db->delete('pages', ['id' => $page_id]);
     }
     public function get_page_by_id($id) {
+      return $this->db->where('id', $id)->get('pages')->row();
+    }
 
-        return $this->db->where('id', $id)->get('pages')->row();
+    public function update_page($id, $data) {
+        return $this->db->where('id', $id)->update('pages', $data);
+    }
+
+
+    // -------------Social Media Model---------------
+
+    public function get_media_icons() {
+        $this->db->order_by('id', 'asc'); 
+        return $this->db->get('social_media_icons')->result();
+    }
+    public function get_media_icon_by_id($id) {
+        return $this->db->get_where('social_media_icons', ['id' => $id])->row();
+    }
+    public function get_social_media() {
+        $this->db->order_by('id', 'DESC'); 
+        return $this->db->get('social_media')->result();
+    }
+    public function add_social_media($data) {
+        return $this->db->insert('social_media', $data);
+    }
+    
+  
+    public function update_page_social_media($id, $data) {
+        return $this->db->where('id', $id)->update('social_media', $data);
+    }
+    public function delete_social_media($category_id) {
+        return $this->db->delete('social_media', ['id' => $category_id]);
     }
 
 

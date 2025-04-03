@@ -2,6 +2,7 @@
 <?php include 'layouts/sidebar.php'; ?>
 
 <!-- Main Content -->
+
 <div class="d-flex flex-column flex-grow-1 h-100 ">
     <?php include 'layouts/header.php'; ?>
 
@@ -79,11 +80,11 @@
 
                                     <td class="text-center">
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <a href="<?= site_url('AdminController/view_post/' . $page->id); ?>"
+                                            <a href="<?= site_url('AdminController/view_page/' . $page->id); ?>"
                                                 class="btn btn-outline-primary " title="View">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="<?= site_url('AdminController/edit_post/'.$page->id); ?>"
+                                            <a href="<?= site_url('AdminController/edit_page/'.$page->id); ?>"
                                                 class="btn btn-outline-warning " title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
@@ -159,35 +160,52 @@
 </script>
 <script>
     $(document).ready(function() {
-    $(document).on('click', '#delete_page', function(e) {
-        e.preventDefault(); // Prevent the default anchor action
-        
-        let pageId = $(this).data('id');
-        // alert(pageId)  
+    $(document).on('click', '.btn-delete-user', function(e) {
+        e.preventDefault(); // Prevent default behavior
+
+        let pageId = $(this).data('id'); // Get the page ID
         if (!pageId) {
             console.log("Page ID is missing!");
             return;
         }
-            $.ajax({
-                url: "<?= site_url('AdminController/delete_page'); ?>",  
-                type: "POST",  
-                data: { page_id: pageId },
-                dataType: "json",  
-                success: function(response) {
-                    if (response.status === "success") {
-                        console.log("Page deleted successfully!");
-                        // location.reload();
-                    } else {
-                        console.log("Failed to delete the page!");
+
+        // Call the existing SweetAlert confirmation function
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you really want to delete this post?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If confirmed, execute AJAX request
+                $.ajax({
+                    url: "<?= site_url('AdminController/delete_page'); ?>",  
+                    type: "POST",  
+                    data: { page_id: pageId },
+                    dataType: "json",  
+                    success: function(response) {
+                        if (response.status === "success") {
+                            Swal.fire("Deleted!", "The page has been deleted.", "success")
+                                // .then(() => {
+                                //     location.reload(); 
+                                // });
+                        } else {
+                            Swal.fire("Error!", "Failed to delete the page.", "error");
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire("Oops!", "Something went wrong!", "error");
                     }
-                },
-                error: function(xhr) {
-                    console.log("Something went wrong!");
-                }
-            });
-        
+                });
+            }
+        });
     });
 });
+
 
     
 </script>

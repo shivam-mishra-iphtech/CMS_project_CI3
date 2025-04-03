@@ -181,7 +181,7 @@
         $('.select2').select2({
             placeholder: "Select Category",
             allowClear: true,
-            width: '100%' // Ensure it matches Bootstrap width
+            width: '100%' 
         });
     });
 </script>
