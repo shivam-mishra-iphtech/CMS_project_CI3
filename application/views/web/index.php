@@ -128,7 +128,7 @@
             if (!empty($latest_posts)) {
                 foreach ($latest_posts as $latest_post) {
                     ?>
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6 col-lg-4 my-2">
 
                 <div class="feature-card shadow">
                     <h3 class="mb-3">

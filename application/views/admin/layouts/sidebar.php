@@ -3,8 +3,7 @@
     @import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
 
     /* Bootstrap Icons */
-    @import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
-
+    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
     .nav-item a {
         font-size: 14px;
     }
@@ -45,6 +44,7 @@
         padding-left: 25px;
     }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <!-- Dashboard -->
 <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
     <!-- Vertical Navbar -->
@@ -163,6 +163,13 @@
                         <ul class="post-menu list-unstyled collapse">
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
+                                    href="<?php echo site_url('AdminController/post_category')?>">
+                                    <i class="bi bi-database-add me-2 text-primary"></i>
+                                   Post category
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/posts_list')?>">
                                     <i class="bi bi-list-task me-2 text-primary"></i>
                                    Post List
@@ -187,13 +194,13 @@
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <ul class="page-menu list-unstyled collapse">
-                            <li>
+                            <!-- <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/page_category')?>">
                                     <i class="bi bi-bookmarks-fill me-2 text-primary"></i>
                                    Pages Category
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/page_list')?>">
@@ -211,7 +218,19 @@
                         </ul>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia/1')?>">
+                        <a class="nav-link" href="<?php echo site_url('MenuController/manage_menus')?>">
+                        <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
+                            Menus
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('AdminController/page_category')?>">
+                        <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
+                            Page Category
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia')?>">
                         <i class="bi bi-globe2 fs-5 me-2"></i>
                             Social Mediad
                         </a>

@@ -19,7 +19,7 @@
     <!-- Main Container -->
     <div class="container my-4">
         <div class="card shadow border-0">
-            
+
             <div class="card-body p-4 p-md-5">
                 <!-- Flash Messages -->
                 <div class="mb-4">
@@ -53,7 +53,7 @@
                             <button type="submit" class="btn btn-primary px-3">Save Post</button>
                         </div>
                     </div>
-                    
+
                     <!-- Left Column -->
                     <div class="col-lg-8">
                         <input type="hidden" name="user_id" value=" <?php echo $this->session->userdata('user_id'); ?>">
@@ -65,8 +65,8 @@
 
                         <div class="mb-4">
                             <label for="short_description" class="form-label fw-bold">Short Description</label>
-                            <textarea class="form-control shadow-none" id="short_description" name="short_description" rows="3"
-                                placeholder="Enter short description" required></textarea>
+                            <textarea class="form-control shadow-none" id="short_description" name="short_description"
+                                rows="3" placeholder="Enter short description" required></textarea>
                         </div>
 
                         <!-- Include CKEditor -->
@@ -85,13 +85,17 @@
 
                     <!-- Right Column -->
                     <div class="col-lg-4">
-                        <div class="card border mb-5">
+                        <div class="card border mb-3">
                             <div class="card-body">
-                                <h6 class="card-title fw-bold mb-3">Post Category</h6>
-                                <select class="form-select select2 form-control-sm shadow-none" name="category" required>
+                                <h6 class="card-title fw-bold mb-3">Page Category</h6>
+                                <select class="form-select select2 form-control-sm shadow-none" name="category"
+                                    required>
                                     <option value="">Select Category</option>
-                                    <option value="1">Latest Post</option>
-                                    <option value="2">Trending Post</option>
+                                    <?php foreach($categories as $category): ?>
+                                    <option value="<?= $category->id; ?>">
+                                        <?= $category->category_name; ?>
+                                    </option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -135,7 +139,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                
+
                 <?= form_close(); ?>
             </div>
         </div>
@@ -181,8 +185,7 @@
         $('.select2').select2({
             placeholder: "Select Category",
             allowClear: true,
-            width: '100%' 
+            width: '100%'
         });
     });
 </script>
-

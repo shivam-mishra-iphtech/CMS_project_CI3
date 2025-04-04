@@ -118,18 +118,18 @@ class AdminModel extends CI_Model {
     }
     //-------------- page category model-----------------
     public function add_page_category($data) {
-        return $this->db->insert('page_category', $data);
+        return $this->db->insert('main_menu', $data);
     }
     
     public function get_page_category() {
         $this->db->order_by('id', 'asc'); 
-        return $this->db->get('page_category')->result();
+        return $this->db->get('main_menu')->result();
     }
     public function update_page_category($id, $data) {
-        return $this->db->where('id', $id)->update('page_category', $data);
+        return $this->db->where('id', $id)->update('main_menu', $data);
     }
     public function delete_page_category($category_id) {
-        return $this->db->delete('page_category', ['id' => $category_id]);
+        return $this->db->delete('main_menu', ['id' => $category_id]);
     }
 
 
@@ -173,11 +173,26 @@ class AdminModel extends CI_Model {
     }
     
   
-    public function update_page_social_media($id, $data) {
+    public function update_social_media($id, $data) {
         return $this->db->where('id', $id)->update('social_media', $data);
     }
     public function delete_social_media($category_id) {
         return $this->db->delete('social_media', ['id' => $category_id]);
+    }
+    
+    public function add_post_category($data) {
+        return $this->db->insert('post_category', $data);
+    }
+    
+    public function get_post_category() {
+        $this->db->order_by('id', 'asc'); 
+        return $this->db->get('post_category')->result();
+    }
+    public function update_post_category($id, $data) {
+        return $this->db->where('id', $id)->update('post_category', $data);
+    }
+    public function delete_post_category($category_id) {
+        return $this->db->delete('post_category', ['id' => $category_id]);
     }
 
 

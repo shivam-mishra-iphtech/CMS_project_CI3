@@ -56,7 +56,7 @@
                                 </a>
                             </div>
                             <div class="text-end">
-                                <button type="submit" class="btn btn-primary px-3">Save Page</button>
+                                <button type="submit" class="btn btn-primary px-3">Save Edit</button>
                             </div>
                         </div>
 
@@ -105,12 +105,12 @@
                                     <select class="form-select select2 form-control-sm shadow-none" name="category"
                                         required>
                                         <option value="<?= $page->page_category; ?>" selected>
-                                            <?= $page->category_name ?? 'Select Category'; ?>
+                                            <?= $page->menu_name ?? 'Select Category'; ?>
                                         </option>
                                         <?php foreach ($categories as $category): ?>
                                         <option value="<?= $category->id; ?>"
                                             <?= ($category->id == $page->page_category) ? 'selected' : ''; ?>>
-                                            <?= $category->category_name; ?>
+                                            <?= $category->menu_name; ?>
                                         </option>
                                         <?php endforeach; ?>
                                     </select>

@@ -344,7 +344,8 @@ class AdminController extends CI_Controller
 
     public function add_post()
     {
-        $this->load->view('admin/add_post');
+        $data['categories'] = $this->AdminModel->get_post_category();
+        $this->load->view('admin/add_post', $data);
     }
     public function add_new_post()
     {
@@ -570,17 +571,64 @@ class AdminController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid post ID!"]);
         }
     }
+    // public function page_list()
+    // {
+    //     $data['pages'] = $this->AdminModel->get_all_page();
+
+    //     if (!empty($data['pages'])) {
+    //         foreach ($data['pages'] as &$page) {
+    //             if (!empty($page->page_category)) {
+    //                 $this->db->where('id', $page->page_category);
+    //                 $query = $this->db->get('page_category'); // Assuming 'categories' is the correct table name
+    //                 $category = $query->row(); // Fetch single row
+                    
+    //                 if ($category) {
+    //                     $page->category_name = $category->menu_name; // Assuming 'name' is the category column
+    //                 } else {
+    //                     $page->category_name = 'Unknown';
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     $this->load->view('admin/page_list', $data);
+    // }
     
     public function page_category()
     {
-        $data['categories'] = $this->AdminModel->get_page_category();
+        $data['pages']=$this->AdminModel->get_all_page();
+        $data['menus'] = $this->AdminModel->get_page_category();
+
+        if(!empty($data['menus'])){
+            foreach($data['menus'] as $menu){
+                $this->db->where('id', $menu->page_link);
+                $query = $this->db->get('pages');
+                $page= $query->row();
+
+                if($page){
+                    $menu->page_title = $page->page_title;
+                    $menu->page_id= $page->id;
+                }
+                else{
+                    $menu->page_title= 'Unknown';
+                    $menu->page_id='Unknown';
+                }
+            }
+        }
+       
         $this->load->view('admin/page_category', $data);
         
     }
     public function add_page_category()
+    // menu_type
+    //menu_name
+    // page_id
     {
         $this->form_validation->set_rules('user_id', 'User ID', 'required');
-        $this->form_validation->set_rules('title', 'Category Name', 'required|trim');
+        $this->form_validation->set_rules('page_id', 'Page ID', 'required');
+        $this->form_validation->set_rules('menu_name', 'Menu Name', 'required|trim');
+        $this->form_validation->set_rules('menu_type', 'Menu Name', 'required|trim');
+
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
@@ -592,7 +640,57 @@ class AdminController extends CI_Controller
 
         $data = [
             'user_id' => $this->input->post('user_id', TRUE),
-            'category_name' => $this->input->post('title', TRUE),
+            'menu_name' => $this->input->post('menu_name', TRUE),
+            'menu_type' => $this->input->post('menu_type', TRUE),
+            'page_link' => $this->input->post('page_id', TRUE),
+
+
+        ];
+
+        if (!empty($category_id)) {
+            // Update category
+            if ($this->AdminModel->update_page_category($category_id, $data)) {
+                $this->session->set_flashdata('success', 'Menu updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error updating Menu.');
+            }
+        } else {
+            // Insert new category
+            if ($this->AdminModel->add_page_category($data)) {
+                $this->session->set_flashdata('success', 'New Menu added successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error in adding new menu.');
+            }
+        }
+
+        redirect('AdminController/page_category');
+    }
+    public function add_sub_menus()
+    // menu_type
+    //menu_name
+    // page_id
+    {
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('page_id', 'Page ID', 'required');
+        $this->form_validation->set_rules('menu_name', 'Menu Name', 'required|trim');
+        $this->form_validation->set_rules('menu_type', 'Menu Name', 'required|trim');
+
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('AdminController/page_category');
+            return;
+        }
+
+        $category_id = $this->input->post('id'); // Hidden input for editing
+
+        $data = [
+            'user_id' => $this->input->post('user_id', TRUE),
+            'menu_name' => $this->input->post('menu_name', TRUE),
+            'menu_type' => $this->input->post('menu_type', TRUE),
+            'page_link' => $this->input->post('page_id', TRUE),
+
+
         ];
 
         if (!empty($category_id)) {
@@ -715,11 +813,11 @@ class AdminController extends CI_Controller
             foreach ($data['pages'] as &$page) {
                 if (!empty($page->page_category)) {
                     $this->db->where('id', $page->page_category);
-                    $query = $this->db->get('page_category'); // Assuming 'categories' is the correct table name
+                    $query = $this->db->get('main_menu'); // Assuming 'categories' is the correct table name
                     $category = $query->row(); // Fetch single row
                     
                     if ($category) {
-                        $page->category_name = $category->category_name; // Assuming 'name' is the category column
+                        $page->category_name = $category->menu_name; // Assuming 'name' is the category column
                     } else {
                         $page->category_name = 'Unknown';
                     }
@@ -963,6 +1061,70 @@ class AdminController extends CI_Controller
         }
 
         redirect('AdminController/social_meadia');
+    }
+    public function delete_social_media($id){
+       if($this->AdminModel->delete_social_media($id)){
+          $this->session->set_flashdata('success', 'Social media deleted successfully.');
+       }else{
+         $this->session->set_flashdata('error', 'deleted error!.');
+       }
+       redirect('AdminController/social_meadia');
+    }
+   
+    //-------------- post category controller function ------------
+
+
+    public function post_category()
+    {
+        $data['categories'] = $this->AdminModel->get_post_category();
+        $this->load->view('admin/post_category', $data);
+        
+    }
+    public function add_post_category()
+    {
+        $this->form_validation->set_rules('user_id', 'User ID', 'required');
+        $this->form_validation->set_rules('title', 'Category Name', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('AdminController/post_category');
+            return;
+        }
+
+        $category_id = $this->input->post('id'); 
+
+        $data = [
+            'user_id' => $this->input->post('user_id', TRUE),
+            'menu_name' => $this->input->post('title', TRUE),
+        ];
+
+        if (!empty($category_id)) {
+            // Update category
+            if ($this->AdminModel->update_post_category($category_id, $data)) {
+                $this->session->set_flashdata('success', 'Category updated successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error updating category.');
+            }
+        } else {
+            // Insert new category
+            if ($this->AdminModel->add_post_category($data)) {
+                $this->session->set_flashdata('success', 'New post category added successfully.');
+            } else {
+                $this->session->set_flashdata('error', 'Error in adding new category.');
+            }
+        }
+
+        redirect('AdminController/post_category');
+    }
+
+    public function delete_post_category($id)
+    {
+        if ($this->AdminModel->delete_post_category($id)) {
+            $this->session->set_flashdata('success', 'Category deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Failed to delete category. Please try again.');
+        }
+        redirect('AdminController/post_category');
     }
 
 
