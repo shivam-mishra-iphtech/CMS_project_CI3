@@ -47,7 +47,11 @@ class AdminController extends CI_Controller
     }
 
     public function user_list()
-    {
+    {  
+        if ($this->session->userdata('user_role') != 2) {
+            redirect('WebController/index');
+            return;
+        }
 
         if (!$this->session->userdata('user_id')) {
             redirect('WebController/login');
@@ -62,6 +66,12 @@ class AdminController extends CI_Controller
     }
     public function add_new_user()
     {
+        if ($this->session->userdata('user_role') != 2) {
+            $this->session->set_flashdata('error', 'You can not add user ! Please Contact to admin.');
+            redirect('AdminController/dashboard');
+            return;
+        }
+        $this->form_validation->set_rules('user_role', 'User Role', 'required');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
@@ -74,6 +84,7 @@ class AdminController extends CI_Controller
                 'name' => $this->input->post('name', TRUE),
                 'email' => $this->input->post('email', TRUE),
                 'password' => password_hash($this->input->post('password'), PASSWORD_BCRYPT),
+                'role'=>$this->input->post('user_role', TRUE)??0,
             ];
 
 
@@ -92,7 +103,7 @@ class AdminController extends CI_Controller
 
         if (!$data['user']) {
             $this->session->set_flashdata('error', 'User not found!');
-            redirect('dashboard');
+            redirect('AdminController/dashboard');
             return;
         }
 
@@ -121,93 +132,32 @@ class AdminController extends CI_Controller
 
         $this->load->view('admin/edit_user', $data);
     }
-    // public function update_user() {
-    //     // echo "test";die;
-    //     // Get the user ID from the form
-    //     $user_id = $this->input->post('user_id', TRUE);
-
-    //     // Validate form input
-    //     $this->form_validation->set_rules('name', 'Name', 'required|trim');
-    //     $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check[' . $user_id . ']');
-    //     // echo "test";die;
-    //     if ($this->form_validation->run() == FALSE) {
-    //         // Load user data again if validation fails
-    //         $data['user'] = $this->AdminModel->get_user_by_id($user_id); 
-    //         $this->load->view('admin/edit_user', $data);
-    //     }
-
-    //     // Handle Profile Image Upload
-    //         if (!empty($_FILES['profile_image']['name'])) {
-    //             $upload_path = BASEPATH . '../public/userImage/';
-    //             if (!is_dir($upload_path)) {
-    //                 mkdir($upload_path, 0777, true);
-    //             }
-
-    //             $file_ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-    //             $unique_filename = time() . '_' . uniqid() . '.' . $file_ext;
-
-    //             $config['upload_path'] = $upload_path;
-    //             $config['allowed_types'] = 'jpg|jpeg|png';
-    //             $config['max_size'] = 5048;
-    //             $config['file_name'] = $unique_filename;
-
-    //             $this->load->library('upload', $config);
-    //             $this->upload->initialize($config);
-
-    //             if ($this->upload->do_upload('profile_image')) {
-
-    //                 $data['image'] = $unique_filename; // Save only the filename
-    //             } else {
-
-    //                 $this->session->set_flashdata('error', $this->upload->display_errors());
-    //                 redirect('AdminController/edit_user/'. $user_id);
-    //             }
-    //         }
-
-    //         else {
-    //         // Prepare user data for update
-    //         $data = [
-    //             'name' => $this->input->post('name', TRUE),
-    //             'email' => $this->input->post('email', TRUE),
-    //         ];
-
-    //         // Update user in DB
-    //         if (!$this->AdminModel->update_user_image($user_id,$data['image'])) {
-    //             $this->session->set_flashdata('error', 'image does not upload .');
-    //             redirect('AdminController/user_profile/' . $user_id);
-    //         }
-    //         if ($this->AdminModel->update_user($user_id, $data)) {
-    //             $this->session->set_flashdata('success', 'User updated successfully.');
-    //             redirect('AdminController/user_profile/' . $user_id);
-    //         } else {
-    //             $this->session->set_flashdata('error', 'Failed to update user.');
-    //             redirect('AdminController/edit_user/' . $user_id);
-    //         }
-    //     }
-    // }
+    
     public function update_user()
     {
-        // Get the user ID from the form
+    
         $user_id = $this->input->post('user_id', TRUE);
+        $this->form_validation->set_rules('user_role', 'User Role', 'required');
 
-        // Validate form input
+
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check[' . $user_id . ']');
 
         if ($this->form_validation->run() == FALSE) {
-            // Load user data again if validation fails
+           
             $data['user'] = $this->AdminModel->get_user_by_id($user_id);
             $this->load->view('admin/edit_user', $data);
             return;
         }
 
-        // Prepare user data
+       
         $data = [
             'name' => $this->input->post('name', TRUE),
             'email' => $this->input->post('email', TRUE),
+            'role'  => $this->input->post('user_role',TRUE)
         ];
 
-        // Handle Profile Image Upload
+        
         if (!empty($_FILES['profile_image']['name'])) {
             $upload_path = BASEPATH . '../public/userImage/';
             if (!is_dir($upload_path)) {
@@ -226,15 +176,14 @@ class AdminController extends CI_Controller
             $this->upload->initialize($config);
 
             if ($this->upload->do_upload('profile_image')) {
-                $Image_data = ['image' => $unique_filename]; // Save only the filename
-            } else {
+                $Image_data = ['image' => $unique_filename]; 
                 $this->session->set_flashdata('error', $this->upload->display_errors());
                 redirect('AdminController/edit_user/' . $user_id);
                 return;
             }
         }
 
-        // Update user in DB
+        
         if (isset($Image_data) && !$this->AdminModel->update_user_image($user_id, $Image_data)) {
             $this->session->set_flashdata('error', 'Image upload failed.');
             redirect('AdminController/user_profile/' . $user_id);
@@ -1076,7 +1025,7 @@ class AdminController extends CI_Controller
 
     public function post_category()
     {
-        $data['categories'] = $this->AdminModel->get_post_category();
+        $data['post_categories'] = $this->AdminModel->get_post_category();
         $this->load->view('admin/post_category', $data);
         
     }
@@ -1095,7 +1044,7 @@ class AdminController extends CI_Controller
 
         $data = [
             'user_id' => $this->input->post('user_id', TRUE),
-            'menu_name' => $this->input->post('title', TRUE),
+            'category_name' => $this->input->post('title', TRUE),
         ];
 
         if (!empty($category_id)) {

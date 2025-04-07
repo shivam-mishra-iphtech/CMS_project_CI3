@@ -3,7 +3,7 @@
     .post-hero {
         height: 400px;
         background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-            url('https://via.placeholder.com/1920x800') center/cover;
+            url('https://images.nightcafe.studio/jobs/pWvU3RiBUozZlsU0u3SU/pWvU3RiBUozZlsU0u3SU--0--7yn3m.jpg?tr=w-1600,c-at_max') center/cover;
     }
 
     .author-img {

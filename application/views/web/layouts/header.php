@@ -88,21 +88,34 @@
     </style>
 </head>
 
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-2">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="<?php echo base_url('public/banners/logo1.jpg'); ?>" alt="Logo" height="45">
-            </a>
+            <?php if (!empty($logo)): ?>
+                <a class="navbar-brand" href="#">
+                    <img src="<?php echo base_url('public/WebBannersImage/' . $logo->image); ?>" alt="Logo" height="45">
+                </a>
+            <?php else: ?>
+                <a class="navbar-brand" href="#">
+                    <img src="<?php echo base_url('public/banners/logo1.jpg'); ?>" alt="Logo" height="45">
+                </a>
+            <?php endif; ?>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link px-3" href="<?php echo site_url('/'); ?>">Home</a></li>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="<?php echo site_url('/'); ?>">Home</a>
+                    </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link px-3 dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown">Categories</a>
+                        <a class="nav-link px-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
                         <ul class="dropdown-menu">
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item d-flex justify-content-between align-items-center" href="#">
@@ -114,6 +127,7 @@
                                     <li><a class="dropdown-item" href="#">Accessories</a></li>
                                 </ul>
                             </li>
+
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item d-flex justify-content-between align-items-center" href="#">
                                     Fashion <i class="bi bi-chevron-right ms-2"></i>
@@ -124,14 +138,18 @@
                                     <li><a class="dropdown-item" href="#">Kids' Fashion</a></li>
                                 </ul>
                             </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">All Categories</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link px-3" href="#">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link px-3" href="#">About Us</a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="#">About Us</a>
+                    </li>
                 </ul>
 
                 <ul class="navbar-nav ms-lg-3">
@@ -143,42 +161,41 @@
                             <li>
                                 <h6 class="dropdown-header">User Account</h6>
                             </li>
+
                             <?php if ($this->session->userdata('logged_in')): ?>
-                            <li>
-                                <a class="dropdown-item"
-                                    href="<?php echo site_url('WebController/user_profile/'.$this->session->userdata('user_id')); ?>">
-                                    <i
-                                        class="bi bi-person-circle me-2"></i><?php echo $this->session->userdata('user_name'); ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="<?php echo site_url('WebController/logout'); ?>">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo site_url('WebController/user_profile/' . $this->session->userdata('user_id')); ?>">
+                                        <i class="bi bi-person-circle me-2"></i>
+                                        <?php echo $this->session->userdata('user_name'); ?>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo site_url('WebController/logout'); ?>">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </a>
+                                </li>
                             <?php else: ?>
-                            <li>
-                                <a class="dropdown-item" href="<?php echo site_url('WebController/login'); ?>">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="<?php echo site_url('WebController/registration'); ?>">
-                                    <i class="bi bi-person-plus me-2"></i>Register
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo site_url('WebController/login'); ?>">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo site_url('WebController/registration'); ?>">
+                                        <i class="bi bi-person-plus me-2"></i>Register
+                                    </a>
+                                </li>
                             <?php endif; ?>
+
+                            <li><hr class="dropdown-divider"></li>
                             <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-2"></i>Help
-                                    Center</a>
+                                <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-2"></i>Help Center</a>
                             </li>
                         </ul>
                     </li>
-
                 </ul>
             </div>
         </div>
     </nav>
+
+   

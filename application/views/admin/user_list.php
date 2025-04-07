@@ -20,6 +20,7 @@
                                     <tr>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
+                                        <th scope="col">Role</th>
                                         <th class="text-center" scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -37,6 +38,10 @@
                                                 </td>
                                                 <td>
                                                     <?php echo htmlspecialchars($user->email, ENT_QUOTES, 'UTF-8'); ?>
+                                                </td>
+                                                <td>
+                                                    
+                                                    <?php if($user->role ==0 ): echo"User"; else: echo "Editor"; endif   ?>
                                                 </td>
                                                
                                                 <td class="text-center">

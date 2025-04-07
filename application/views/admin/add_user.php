@@ -25,17 +25,17 @@
                 <!-- Flash Messages -->
                 <div class="text-start">
                     <?php if ($this->session->flashdata('success')): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $this->session->flashdata('success'); ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?= $this->session->flashdata('success'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     <?php endif; ?>
 
                     <?php if ($this->session->flashdata('error')): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= $this->session->flashdata('error'); ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <?= $this->session->flashdata('error'); ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                     <?php endif; ?>
 
                     <!-- Validation Errors -->
@@ -44,25 +44,37 @@
 
                 <!-- User Registration Form -->
                 <?= form_open_multipart('AdminController/add_new_user'); ?>
+                
+                    <label for="user_role" class="form-label">User Role</label>
+                    <select class="form-select form-control-sm shadow-none mb-3" name="user_role" required>
+                        <option value="">Select Category</option>
+                        <option value="0">User</option>
+                        <option value="1"> Editor</option>
+                    </select>
+              
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Create password" required>
+                    <input type="password" class="form-control" id="password" name="password"
+                        placeholder="Create password" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                        placeholder="Confirm password" required>
                 </div>
 
                 <div class="text-end">

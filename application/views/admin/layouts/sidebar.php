@@ -232,7 +232,13 @@
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia')?>">
                         <i class="bi bi-globe2 fs-5 me-2"></i>
-                            Social Mediad
+                            Social Media
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('BannerController/manage_banners')?>">
+                        <i class="bi bi-globe2 fs-5 me-2"></i>
+                            Banners
                         </a>
                     </li>
                 </ul>

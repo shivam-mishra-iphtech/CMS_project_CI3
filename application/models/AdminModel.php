@@ -27,44 +27,36 @@ class AdminModel extends CI_Model {
     
     
 
-    /**
-     * Insert a new user into the database
-     */
+    
     public function insert_user($data) {
         return $this->db->insert('user', $data);
     }
 
 
-    /**
-     * Register user (Alias for insert_user)
-     */
+  
     public function register($data) {
         return $this->insert_user($data);
     }
 
-    /**
-     * Get a single user by ID
-     */
+    
     public function get_user($id) {
         return $this->db->get_where('user', ['id' => $id])->row_array();
     }
 
-    /**
-     * Update user details
-     */
+    
     public function update_user($id, $data) {
         return $this->db->where('id', $id)->update('user', $data);
     }
     public function update_user_image($user_id, $data) {
-        // Check if the user already has an image entry
+     
         $query = $this->db->get_where('users_image', ['user_id' => $user_id]);
     
         if ($query->num_rows() > 0) {
-            // User exists, update the image
+          
             return $this->db->where('user_id', $user_id)->update('users_image', $data);
         } else {
-            // User does not exist, insert a new record
-            $data['user_id'] = $user_id; // Ensure user_id is part of the data array
+           
+            $data['user_id'] = $user_id; 
             return $this->db->insert('users_image', $data);
         }
     }
@@ -179,7 +171,8 @@ class AdminModel extends CI_Model {
     public function delete_social_media($category_id) {
         return $this->db->delete('social_media', ['id' => $category_id]);
     }
-    
+    // ------------- post_category Model---------------
+
     public function add_post_category($data) {
         return $this->db->insert('post_category', $data);
     }
@@ -194,6 +187,34 @@ class AdminModel extends CI_Model {
     public function delete_post_category($category_id) {
         return $this->db->delete('post_category', ['id' => $category_id]);
     }
+    // ------------- banner Model---------------
+
+    public function get_banner() {
+        $this->db->order_by('id', 'asc'); 
+        return $this->db->get('banner')->result();
+    }
+   
+
+    public function add_banner($data)
+    {
+        return $this->db->insert('banner', $data);
+    }
+
+    public function update_banner($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update('banner', $data);
+    }
+    
+    public function get_banner_by_id($id)
+    {
+        return $this->db->get_where('banner', ['id' => $id])->row();
+    }
+    public function delete_banner($category_id) {
+        return $this->db->delete('banner', ['id' => $category_id]);
+    }
+
+    
 
 
     

@@ -17,9 +17,25 @@ class WebController extends CI_Controller {
     }
 
     public function index() {
-        $data['latest_posts']=$this->UserModel->get_latest_post();
+        // Load required models if not autoloaded
+        $this->load->model('UserModel');
+    
+        // Get banners where banner_type = 'Main Banner'
+        $data['main_banners'] = $this->UserModel->get_banners_by_type('Main Banner');
+    
+        // Get logo
+        $data['logo'] = $this->UserModel->get_logo('Site Logo');
+    
+        // Get latest posts
+        $data['latest_posts'] = $this->UserModel->get_latest_post();
+    
+        // Load views
+       
         $this->load->view('web/index', $data);
+       
     }
+    
+    
 
     public function registration() {
         $this->load->view('web/registration');
@@ -251,26 +267,23 @@ class WebController extends CI_Controller {
         // Redirect back to user profile page
         redirect('WebController/user_profile/' . $id);
     }
-    // public function view_post() {
-    //     // $data['latest_posts']=$this->UserModel->get_latest_post();
-    //     $this->load->view('web/posts');
-    // }
+    
     public function view_post_by_id($id) {
-        // Fetch the latest post by ID
+        $data['logo'] = $this->UserModel->get_logo('Site Logo');
         $data['latest_post'] = $this->UserModel->get_post_by_id($id);
     
-        // Check if the latest post exists
+        
         if (!empty($data['latest_post'])) {
-            // Get the category of the latest post
+           
             $post_category = $data['latest_post']->category;
     
-            // Fetch related posts based on the category of the latest post
+          
             $data['related_posts'] = $this->UserModel->get_related_posts($id, $post_category);
     
-            // Load the view and pass both latest_post and related_posts data
+          
             $this->load->view('web/posts', $data);
         } else {
-            // If no post is found, show a 404 error
+           
             show_404();
         }
     }
@@ -279,7 +292,7 @@ class WebController extends CI_Controller {
    
     
     public function view_page() {
-        // $data['latest_posts']=$this->UserModel->get_latest_post();
+       
         $this->load->view('web/pages');
     }
 }
