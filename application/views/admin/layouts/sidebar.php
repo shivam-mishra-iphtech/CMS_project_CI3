@@ -223,12 +223,12 @@
                             Menus
                         </a>
                     </li>
-                    <li class="nav-item mx-2">
+                    <!-- <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('AdminController/page_category')?>">
                         <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
                             Page Category
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia')?>">
                         <i class="bi bi-globe2 fs-5 me-2"></i>
@@ -237,8 +237,13 @@
                     </li>
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('BannerController/manage_banners')?>">
-                        <i class="bi bi-globe2 fs-5 me-2"></i>
+                        <i class="bi bi-images fs-5 me-2"></i>
                             Banners
+                        </a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('MediaFileController/manage_media_files')?>">
+                            <i class="bi bi-folder-plus fs-5 me-2"></i>                            Media Files
                         </a>
                     </li>
                 </ul>

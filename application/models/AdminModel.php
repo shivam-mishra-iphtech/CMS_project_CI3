@@ -214,6 +214,29 @@ class AdminModel extends CI_Model {
         return $this->db->delete('banner', ['id' => $category_id]);
     }
 
+
+    // ---------------Media file Model -----------------
+
+
+    public function get_media_files() {
+        $this->db->order_by('id', 'asc'); 
+        return $this->db->get('media_filess')->result();
+    }
+
+    public function add_media_file($data)
+    {
+        return $this->db->insert('media_filess', $data);
+    }
+    public function delete_media_file($id) {
+        return $this->db->delete('media_filess', ['id' => $id]);
+    }
+    public function get_media_file_id($id)
+    {
+        return $this->db->get_where('media_filess', ['id' => $id])->row();
+    }
+   
+
+
     
 
 

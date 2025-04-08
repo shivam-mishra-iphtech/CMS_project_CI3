@@ -10,19 +10,17 @@ class MenuController extends CI_Controller {
     public $pagination;
     public function __construct() {
         parent::__construct();
+        $this->load->model('AdminModel');
         $this->load->model('MenuModel');
     }
 
-    public function manage_menus($menu_type = 'main-menu') {
-        $data['menu_type'] = $menu_type;
-        $data['menu_items'] = $this->MenuModel->get_menu_items($menu_type);
-        $data['pages'] = $this->MenuModel->get_available_pages();
-        $data['posts'] = $this->MenuModel->get_available_posts();
-        
-        $this->load->view('admin/layouts/header');
-        $this->load->view('admin/menu_management', $data);
-        $this->load->view('admin/layouts/footer');
+    public function manage_menus() {
+        $data['posts'] = $this->AdminModel->get_all_posts();  
+        $data['pages'] = $this->AdminModel->get_all_page();   
+    
+        $this->load->view('admin/menu_management', $data);    
     }
+    
 
     public function save_order() {
         $items = json_decode($this->input->post('items'));
@@ -30,7 +28,7 @@ class MenuController extends CI_Controller {
         echo json_encode(['status' => 'success']);
     }
 
-    public function add_item() {
+    public function add_menu_item() {
         $data = [
             'title' => $this->input->post('title'),
             'type' => $this->input->post('type'),

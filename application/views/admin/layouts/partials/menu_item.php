@@ -1,50 +1,38 @@
-<?php
-// Ensure we have valid item data
-if (!isset($item) || !is_array($item)) return;
-
-// Escape all output values
-$escapedItem = [
-    'id' => htmlspecialchars($item['id'] ?? '', ENT_QUOTES, 'UTF-8'),
-    'title' => htmlspecialchars($item['title'] ?? '', ENT_QUOTES, 'UTF-8'),
-    'url' => htmlspecialchars($item['url'] ?? '#', ENT_QUOTES, 'UTF-8'),
-    'type' => htmlspecialchars($item['type'] ?? 'custom', ENT_QUOTES, 'UTF-8'),
-    'newtab' => !empty($item['newtab']) ? 1 : 0,
-    'page_id' => isset($item['page_id']) ? (int)$item['page_id'] : null,
-    'children' => $item['children'] ?? []
-];
-?>
-
-<li class="dd-item" 
-    data-id="<?= $escapedItem['id'] ?>"
-    data-item='<?= json_encode($escapedItem, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>'>
-    
-    <div class="dd-content">
-        <span class="dd-handle">
-            <?= $escapedItem['title'] ?>
-            <?php if($escapedItem['type'] === 'custom'): ?>
-                <small class="text-muted ms-2"><?= $escapedItem['url'] ?></small>
-            <?php endif; ?>
-        </span>
-
-        <div class="dd-actions">
-            <button type="button" class="btn btn-sm btn-link text-secondary btn-edit">
-                <i class="bi bi-pencil"></i>
-            </button>
-            <button type="button" class="btn btn-sm btn-link text-danger btn-delete">
-                <i class="bi bi-trash"></i>
-            </button>
-        </div>
-    </div>
-
-    <?php if(!empty($escapedItem['children'])): ?>
-    <ol class="dd-list">
-        <?php foreach($escapedItem['children'] as $childItem): ?>
-            <?php 
-                // Recursively include menu_item partial with child item
-                $item = $childItem;
-                include __DIR__.'/menu_item.php';
+<?php foreach ($items as $item): ?>
+    <?php if ($item->parent_id == $parent_id): ?>
+        <li class="dd-item" data-id="<?php echo $item->id; ?>">
+            <div class="dd-handle bg-light p-3 d-flex justify-content-between align-items-center">
+                <span>
+                    <i class="fas fa-arrows-alt me-2"></i>
+                    <?php echo $item->menu_name; ?>
+                    <?php if($item->menu_type != 'custom'): ?>
+                        <small class="text-muted ms-2">(<?php echo ucfirst($item->menu_type); ?>)</small>
+                    <?php endif; ?>
+                </span>
+                <div class="btn-group">
+                    <a href="<?php echo site_url('MenuController/edit_menu_item/'.$item->id); ?>" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="<?php echo site_url('MenuController/delete_menu_item/'.$item->id); ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+            <?php
+            // Check if this item has children
+            $has_children = false;
+            foreach ($items as $child_item) {
+                if ($child_item->parent_id == $item->id) {
+                    $has_children = true;
+                    break;
+                }
+            }
             ?>
-        <?php endforeach; ?>
-    </ol>
+            <?php if ($has_children): ?>
+                <ol class="dd-list">
+                    <?php $this->load->view('menu/menu_structure', array('items' => $items, 'parent_id' => $item->id)); ?>
+                </ol>
+            <?php endif; ?>
+        </li>
     <?php endif; ?>
-</li>
+<?php endforeach; ?>
