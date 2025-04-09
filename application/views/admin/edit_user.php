@@ -6,10 +6,10 @@
     <header class="bg-surface-primary border-bottom py-4">
         <div class="container-fluid">
             <div class="d-flex justify-content-between align-items-center">
-            
+
                 <h1 class="h2 mb-0 ls-tight">
                     <?php if($user->role != 0): ?>
-                        Edit Your Profile
+                    Edit Your Profile
                     <?php else: ?>
                     Edit User Data
                     <?php endif?>
@@ -53,16 +53,18 @@
                 <input type="hidden" name="user_id" value="<?= isset($user->id) ? $user->id : ''; ?>">
 
                 <div class="row">
-                <?php if($user->role != 2): ?>
+                    <?php if ($this->session->userdata('user_role') == 2): ?>
                     <label for="user_role" class="form-label">User Role</label>
                     <select class="form-select form-control-sm shadow-none mb-3" name="user_role" required>
-                        <option value="">Select Category</option>
+                        <option value="">Select Role</option>
                         <option value="0" <?= set_select('user_role', '0', isset($user->role) && $user->role == 0); ?>>
                             User</option>
                         <option value="1" <?= set_select('user_role', '1', isset($user->role) && $user->role == 1); ?>>
                             Editor</option>
+                        <option value="2" <?= set_select('user_role', '2', isset($user->role) && $user->role == 2); ?>>
+                            Admin</option>
                     </select>
-                    <?php endif ?>
+                    <?php endif; ?>
 
                     <div class="col-md-12">
                         <div class="mb-3">

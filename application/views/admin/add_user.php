@@ -50,6 +50,7 @@
                         <option value="">Select Category</option>
                         <option value="0">User</option>
                         <option value="1"> Editor</option>
+                        <option value="2">Admin</option>
                     </select>
               
 

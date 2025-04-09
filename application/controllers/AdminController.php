@@ -24,27 +24,37 @@ class AdminController extends CI_Controller
     }
 
     public function dashboard()
-    {
-        if (!$this->session->userdata('user_id')) {
-            redirect('WebController/login');
-            return;
-        }
-        if ($this->session->userdata('user_role') != 2) {
-            redirect('WebController/index');
-            return;
-        }
-
-        $this->load->library('pagination');
-        $config['base_url'] = site_url('AdminController/dashboard');
-        $config['total_rows'] = $this->AdminModel->get_users_count();
-        $config['per_page'] = 10;
-        $config['uri_segment'] = 3;
-        $this->pagination->initialize($config);
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['users'] = $this->AdminModel->get_users_paginated($config['per_page'], $page);
-        $data['pagination_links'] = $this->pagination->create_links();
-        $this->load->view('admin/dashboard', $data);
+{
+    // Check if the user is logged in
+    if (!$this->session->userdata('user_id')) {
+        redirect('WebController/login');
+        return;
     }
+
+    // Allow only user_role 1 or 2 to access the admin panel
+    $user_role = $this->session->userdata('user_role');
+    if ($user_role != 1 && $user_role != 2) {
+        redirect('WebController/index');
+        return;
+    }
+
+    // Pagination setup
+    $this->load->library('pagination');
+    $config['base_url'] = site_url('AdminController/dashboard');
+    $config['total_rows'] = $this->AdminModel->get_users_count();
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+
+    $this->pagination->initialize($config);
+
+    $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+    $data['users'] = $this->AdminModel->get_users_paginated($config['per_page'], $page);
+    $data['pagination_links'] = $this->pagination->create_links();
+
+    // Load dashboard view
+    $this->load->view('admin/dashboard', $data);
+}
+
 
     public function user_list()
     {  
@@ -71,7 +81,7 @@ class AdminController extends CI_Controller
             redirect('AdminController/dashboard');
             return;
         }
-        $this->form_validation->set_rules('user_role', 'User Role', 'required');
+        $this->form_validation->set_rules('user_role', 'User Role');
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[user.email]');
         $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]');
@@ -133,71 +143,76 @@ class AdminController extends CI_Controller
         $this->load->view('admin/edit_user', $data);
     }
     
-    public function update_user()
-    {
     
-        $user_id = $this->input->post('user_id', TRUE);
-        $this->form_validation->set_rules('user_role', 'User Role', 'required');
+    public function update_user()
+{
+    $user_id = $this->input->post('user_id', TRUE);
+    $this->form_validation->set_rules('name', 'Name', 'required|trim');
+    $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check[' . $user_id . ']');
 
+    if ($this->form_validation->run() == FALSE) {
+        // Reload view with existing user data on validation failure
+        $data['user'] = $this->UserModel->get_user_by_id($user_id);
+        $this->load->view('admin/edit_user', $data);
+        return;
+    }
 
-        $this->form_validation->set_rules('name', 'Name', 'required|trim');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_email_check[' . $user_id . ']');
+    // Prepare data for update
+    $data = [
+        'name' => $this->input->post('name', TRUE),
+        'email' => $this->input->post('email', TRUE),
+        'role' => $this->input->post('user_role', TRUE)
+    ];
 
-        if ($this->form_validation->run() == FALSE) {
-           
-            $data['user'] = $this->AdminModel->get_user_by_id($user_id);
-            $this->load->view('admin/edit_user', $data);
+    $Image_data = [];
+
+    // Handle image upload if provided
+    if (!empty($_FILES['profile_image']['name'])) {
+        $upload_path = BASEPATH . '../public/userImage/';
+        if (!is_dir($upload_path)) {
+            mkdir($upload_path, 0777, true);
+        }
+
+        $file_ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
+        $unique_filename = time() . '_' . uniqid() . '.' . $file_ext;
+
+        $config['upload_path'] = $upload_path;
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['max_size'] = 5048;
+        $config['file_name'] = $unique_filename;
+
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('profile_image')) {
+            $Image_data = ['image' => $unique_filename];
+        } else {
+            // Upload failed
+            $this->session->set_flashdata('error', $this->upload->display_errors());
+            redirect('AdminController/edit_user/' . $user_id);
             return;
         }
+    }
 
-       
-        $data = [
-            'name' => $this->input->post('name', TRUE),
-            'email' => $this->input->post('email', TRUE),
-            'role'  => $this->input->post('user_role',TRUE)
-        ];
-
-        
-        if (!empty($_FILES['profile_image']['name'])) {
-            $upload_path = BASEPATH . '../public/userImage/';
-            if (!is_dir($upload_path)) {
-                mkdir($upload_path, 0777, true);
-            }
-
-            $file_ext = pathinfo($_FILES['profile_image']['name'], PATHINFO_EXTENSION);
-            $unique_filename = time() . '_' . uniqid() . '.' . $file_ext;
-
-            $config['upload_path'] = $upload_path;
-            $config['allowed_types'] = 'jpg|jpeg|png';
-            $config['max_size'] = 5048;
-            $config['file_name'] = $unique_filename;
-
-            $this->load->library('upload', $config);
-            $this->upload->initialize($config);
-
-            if ($this->upload->do_upload('profile_image')) {
-                $Image_data = ['image' => $unique_filename]; 
-                $this->session->set_flashdata('error', $this->upload->display_errors());
-                redirect('AdminController/edit_user/' . $user_id);
-                return;
-            }
-        }
-
-        
-        if (isset($Image_data) && !$this->AdminModel->update_user_image($user_id, $Image_data)) {
+    // If image uploaded, update image
+    if (!empty($Image_data)) {
+        if (!$this->AdminModel->update_user_image($user_id, $Image_data)) {
             $this->session->set_flashdata('error', 'Image upload failed.');
             redirect('AdminController/user_profile/' . $user_id);
             return;
         }
-
-        if ($this->AdminModel->update_user($user_id, $data)) {
-            $this->session->set_flashdata('success', 'User updated successfully.');
-            redirect('AdminController/user_profile/' . $user_id);
-        } else {
-            $this->session->set_flashdata('error', 'Failed to update user.');
-            redirect('AdminController/edit_user/' . $user_id);
-        }
     }
+
+    // Update user info
+    if ($this->AdminModel->update_user($user_id, $data)) {
+        $this->session->set_flashdata('success', 'User updated successfully.');
+        redirect('AdminController/user_profile/' . $user_id);
+    } else {
+        $this->session->set_flashdata('error', 'Failed to update user.');
+        redirect('AdminController/edit_user/' . $user_id);
+    }
+}
+
 
 
 
@@ -520,28 +535,7 @@ class AdminController extends CI_Controller
             echo json_encode(["status" => "error", "message" => "Invalid post ID!"]);
         }
     }
-    // public function page_list()
-    // {
-    //     $data['pages'] = $this->AdminModel->get_all_page();
 
-    //     if (!empty($data['pages'])) {
-    //         foreach ($data['pages'] as &$page) {
-    //             if (!empty($page->page_category)) {
-    //                 $this->db->where('id', $page->page_category);
-    //                 $query = $this->db->get('page_category'); // Assuming 'categories' is the correct table name
-    //                 $category = $query->row(); // Fetch single row
-                    
-    //                 if ($category) {
-    //                     $page->category_name = $category->menu_name; // Assuming 'name' is the category column
-    //                 } else {
-    //                     $page->category_name = 'Unknown';
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     $this->load->view('admin/page_list', $data);
-    // }
     
     public function page_category()
     {
@@ -1075,6 +1069,41 @@ class AdminController extends CI_Controller
         }
         redirect('AdminController/post_category');
     }
+
+    public function users_post_comments() {
+        $data['comments'] = $this->AdminModel->get_uset_post_comments();
+    
+        if (!empty($data['comments'])) {
+            foreach ($data['comments'] as $comment) {
+                $userImage = $this->AdminModel->get_user_image_by_id($comment->user_id);
+                if ($userImage) {
+                    $comment->userImage = $userImage->image; // assuming 'image' is the field name
+                     // assuming 'name' is the field name
+                } else {
+                    $comment->userImage = 'default.jpg';      // fallback image
+                        // fallback name
+                }
+            }
+        }
+    
+        $this->load->view('admin/user_comments', $data);
+    }
+    public function update_comment_status()
+    {
+        $post_id = $this->input->post('post_id');
+        $status = $this->input->post('status');
+
+        if (!empty($post_id)) {
+            $this->db->where('id', $post_id);
+            $this->db->update('user_coments', ['status' => $status]);
+
+            echo json_encode(["status" => "success", "message" => "Comment status updated successfully!"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Invalid comment ID!"]);
+        }
+    }
+   
+    
 
 
 

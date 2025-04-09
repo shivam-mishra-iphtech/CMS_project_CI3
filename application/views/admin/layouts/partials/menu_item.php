@@ -11,10 +11,10 @@
                 </span>
                 <div class="btn-group">
                     <a href="<?php echo site_url('MenuController/edit_menu_item/'.$item->id); ?>" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-edit"></i>
+                        <i class="bi bi-pen"></i>
                     </a>
                     <a href="<?php echo site_url('MenuController/delete_menu_item/'.$item->id); ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">
-                        <i class="fas fa-trash"></i>
+                        <i class="bi bi-trash"></i>
                     </a>
                 </div>
             </div>

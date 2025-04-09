@@ -24,9 +24,54 @@ class MediaFileController extends CI_Controller
     }
     public function manage_media_files()
     {
-        $data['media_files'] = $this->AdminModel->get_media_files();
+        // Load pagination library
+        $this->load->library('pagination');
+        $config['full_tag_open'] = '<ul class="pagination justify-content-center">';
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_link'] = 'First';
+        $config['first_tag_open'] = '<li class="page-item">';
+        $config['first_tag_close'] = '</li>';
+
+        $config['last_link'] = 'Last';
+        $config['last_tag_open'] = '<li class="page-item">';
+        $config['last_tag_close'] = '</li>';
+
+        $config['next_link'] = '&raquo;';
+        $config['next_tag_open'] = '<li class="page-item">';
+        $config['next_tag_close'] = '</li>';
+
+        $config['prev_link'] = '&laquo;';
+        $config['prev_tag_open'] = '<li class="page-item">';
+        $config['prev_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="page-item text-dark active"><span class="page-link">';
+        $config['cur_tag_close'] = '</span></li>';
+
+        $config['num_tag_open'] = '<li class="page-item">';
+        $config['num_tag_close'] = '</li>';
+
+        $config['attributes'] = ['class' => 'page-link'];
+
+
+        // Pagination config
+        $config['base_url'] = site_url('MediaFileController/manage_media_files');
+        $config['total_rows'] = $this->AdminModel->count_all_media_files(); // total number of files
+        $config['per_page'] = 12;
+        $config['uri_segment'] = 3;
+
+        $this->pagination->initialize($config);
+
+        // Get current page from URL
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        // Fetch media files for current page
+        $data['media_files'] = $this->AdminModel->get_media_files_paginated($config['per_page'], $page);
+        $data['pagination_links'] = $this->pagination->create_links();
+
         $this->load->view('admin/media_files', $data);
     }
+
     public function save_media_files()
 {
     $this->form_validation->set_rules('user_id', 'User ID', 'required');
@@ -85,7 +130,7 @@ class MediaFileController extends CI_Controller
                         $media_type = 'other';
                     }
 
-                    $file_size = round($file_data['file_size'] / 1024, 2) . ' KB';
+                    // $file_size = round($file_data['file_size'] / 1024, 2) . ' KB';
 
                     $file_info = [
                         'user_id'          => $this->input->post('user_id', TRUE),
@@ -93,7 +138,7 @@ class MediaFileController extends CI_Controller
                         'original_name'    => $_FILES['media_file']['name'][$i],
                         'media_file'       => $file_name,
                         'media_file_type'  => $media_type,
-                        'file_size'        => $file_size,
+                        'file_size'        => $_FILES['file']['size'],
                         'upload_date'      => date('Y-m-d H:i:s'),
                         'status'           => 1
                     ];

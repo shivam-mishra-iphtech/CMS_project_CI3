@@ -114,23 +114,31 @@
                     </div>
 
                     <!-- Comment Form -->
-                    <form class="mt-5">
-                        <h3 class="mb-4">Leave a Comment</h3>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" placeholder="Your Name">
+                    <h3 class="mb-4">Leave a Comment</h3>
+
+                        <form class="ajax-comment-form">
+                            <input type="hidden" name="post_id" value="<?= $latest_post->id ?>">
+                            <input type="hidden" name="user_id" value="<?= $this->session->userdata('user_id') ?>">
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control" rows="4" name="coment" placeholder="Your Comment" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" placeholder="Your Email">
-                            </div>
-                            <div class="col-12">
-                                <textarea class="form-control" rows="4" placeholder="Your Comment"></textarea>
-                            </div>
-                            <div class="col-12">
-                                <button class="btn btn-primary">Post Comment</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+
+<!-- Message area -->
+<div id="comment-response" class="mt-3"></div>
+
                 </section>
             </div>
 
@@ -185,3 +193,38 @@
     </main>
 <?php } ?>
 <?php include 'layouts/footer.php'; ?>
+<script>
+$(document).ready(function () {
+    $('.ajax-comment-form').on('submit', function (e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var formData = form.serialize();
+
+        $.ajax({
+            url: "<?= site_url('WebController/add_user_comment') ?>",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(response) {
+                    
+                    if (response.status === "success") {
+                        
+                        console.log("Page added successfully!");
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2500); 
+
+                    } else {
+                        
+                        console.log("failed to add new page !.");
+                    }
+                },
+                error: function(xhr) {
+                    
+                    console.log("Something went wrong!");
+                }
+        });
+    });
+});
+</script>

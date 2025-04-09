@@ -295,4 +295,34 @@ class WebController extends CI_Controller {
        
         $this->load->view('web/pages');
     }
+   
+
+    public function add_user_comment()
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->form_validation->set_rules('coment', 'Comment', 'required');
+
+            if ($this->form_validation->run() == FALSE) {
+                echo json_encode(['status' => 'error', 'message' => validation_errors()]);
+                return;
+            }
+
+            $data = [
+                'user_id'     => $this->input->post('user_id'),
+                'user_name'   => $this->input->post('name', TRUE),
+                'email'       => $this->input->post('email', TRUE),
+                'user_coment' => json_encode($this->input->post('coment', TRUE)),
+                'post_id'     => $this->input->post('post_id')
+            ];
+
+            if ($this->UserModel->add_post_comment($data)) {
+                echo json_encode(['status' => 'success', 'message' => 'Your comment was successfully received.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Server error. Please try again later.']);
+            }
+        } else {
+            show_404(); // or redirect if not AJAX
+        }
+    }
+
 }

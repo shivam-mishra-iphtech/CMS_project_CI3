@@ -93,6 +93,12 @@ class UserModel extends CI_Model {
     public function get_logo($type) {
         return $this->db->where(['banner_type' => $type, 'status' => 1])->order_by('id', 'DESC')->limit(1)->get('banner')->row();
     }
+    public function get_user_post_comment() {
+        return $this->db->where([ 'status' => 1])->order_by('id', 'DESC')->limit(1)->get('user_coments')->row();
+    } 
+    public function add_post_comment($data){
+       return $this->db->insert('user_coments', $data);
+    }
     
     
     

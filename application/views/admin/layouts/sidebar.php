@@ -4,6 +4,7 @@
 
     /* Bootstrap Icons */
     @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
     .nav-item a {
         font-size: 14px;
     }
@@ -112,10 +113,12 @@
 
                     <!-- Messages with Badge -->
                     <li class="nav-item mx-2 position-relative">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?= site_url('AdminController/users_post_comments') ?>">
                             <i class="bi bi-chat-dots fs-5 me-2"></i>
                             Messages
-                            <span class="badge bg-danger rounded-pill position-absolute translate-middle">6</span>
+                            <span class="badge bg-danger rounded-pill position-absolute translate-middle">
+                                <?= $this->db->count_all('user_coments') ?>
+                            </span>
                         </a>
                     </li>
 
@@ -132,7 +135,7 @@
                         <a class="nav-link d-flex align-items-center user-toggle" href="#">
                             <i class="bi bi-people fs-5 me-2 me-0"></i>
                             Users
-                            <i  class="bi bi-chevron-down  ms-auto"></i>
+                            <i class="bi bi-chevron-down  ms-auto"></i>
                         </a>
                         <ul class="user-menu list-unstyled collapse">
                             <li>
@@ -156,8 +159,8 @@
 
                     <li class="nav-item mx-2">
                         <a class="nav-link d-flex align-items-center post-toggle" href="#">
-                        <i class="bi bi-newspaper fs-5 me-2 "></i>
-                           Posts
+                            <i class="bi bi-newspaper fs-5 me-2 "></i>
+                            Posts
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <ul class="post-menu list-unstyled collapse">
@@ -165,14 +168,14 @@
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/post_category')?>">
                                     <i class="bi bi-database-add me-2 text-primary"></i>
-                                   Post category
+                                    Post category
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/posts_list')?>">
                                     <i class="bi bi-list-task me-2 text-primary"></i>
-                                   Post List
+                                    Post List
                                 </a>
                             </li>
                             <li>
@@ -185,12 +188,11 @@
                         </ul>
                     </li>
 
-
-                     <!-- ----------- add page ----------  -->
+                    <!-- ----------- add page ----------  -->
                     <li class="nav-item mx-2">
                         <a class="nav-link d-flex align-items-center page-toggle" href="#">
-                        <i class="bi bi-code-square fs-5 me-2"></i>
-                           Pages
+                            <i class="bi bi-code-square fs-5 me-2"></i>
+                            Pages
                             <i class="bi bi-chevron-down ms-auto"></i>
                         </a>
                         <ul class="page-menu list-unstyled collapse">
@@ -205,7 +207,7 @@
                                 <a class="dropdown-item py-2 px-4 d-flex align-items-center"
                                     href="<?php echo site_url('AdminController/page_list')?>">
                                     <i class="bi bi-list-task me-2 text-primary"></i>
-                                   Pages List
+                                    Pages List
                                 </a>
                             </li>
                             <li>
@@ -219,7 +221,7 @@
                     </li>
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('MenuController/manage_menus')?>">
-                        <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
+                            <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
                             Menus
                         </a>
                     </li>
@@ -231,19 +233,19 @@
                     </li> -->
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('AdminController/social_meadia')?>">
-                        <i class="bi bi-globe2 fs-5 me-2"></i>
+                            <i class="bi bi-globe2 fs-5 me-2"></i>
                             Social Media
                         </a>
                     </li>
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('BannerController/manage_banners')?>">
-                        <i class="bi bi-images fs-5 me-2"></i>
+                            <i class="bi bi-images fs-5 me-2"></i>
                             Banners
                         </a>
                     </li>
                     <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('MediaFileController/manage_media_files')?>">
-                            <i class="bi bi-folder-plus fs-5 me-2"></i>                            Media Files
+                            <i class="bi bi-folder-plus fs-5 me-2"></i>Media Files
                         </a>
                     </li>
                 </ul>
@@ -252,7 +254,8 @@
                 <!-- Navigation -->
                 <ul class="navbar-nav mb-md-4">
                     <li>
-                        <div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide" href="#">
+                        <div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide"
+                            href="facebook.com">
                             Contacts
                             <span
                                 class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-4">13</span>
@@ -297,16 +300,16 @@
             document.querySelector(".page-toggle").addEventListener("click", function(e) {
                 e.preventDefault();
                 const userMenu = document.querySelector(".page-menu");
-                userMenu.style.display = (userMenu.style.display === "block") ? "none":
-                    "block";
-            });
-        }); document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector(".media-toggle").addEventListener("click", function(e) {
-                e.preventDefault();
-                const userMenu = document.querySelector(".media-menu");
-                userMenu.style.display = (userMenu.style.display === "block") ? "none":
+                userMenu.style.display = (userMenu.style.display === "block") ? "none" :
                     "block";
             });
         });
-         
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector(".media-toggle").addEventListener("click", function(e) {
+                e.preventDefault();
+                const userMenu = document.querySelector(".media-menu");
+                userMenu.style.display = (userMenu.style.display === "block") ? "none" :
+                    "block";
+            });
+        });
     </script>

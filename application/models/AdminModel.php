@@ -5,7 +5,6 @@ class AdminModel extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-
     
     public function get_all_users() {
         $this->db->where('role <>', 2); 
@@ -23,17 +22,11 @@ class AdminModel extends CI_Model {
         $this->db->where('role !=', 2);
         return $this->db->count_all_results('user');
     }
-    
-    
-    
 
-    
     public function insert_user($data) {
         return $this->db->insert('user', $data);
     }
 
-
-  
     public function register($data) {
         return $this->insert_user($data);
     }
@@ -60,11 +53,6 @@ class AdminModel extends CI_Model {
             return $this->db->insert('users_image', $data);
         }
     }
-    
-    
-    
-
-   
     public function delete_user($id) {
         return $this->db->delete('user', ['id' => $id]);
     }
@@ -219,7 +207,7 @@ class AdminModel extends CI_Model {
 
 
     public function get_media_files() {
-        $this->db->order_by('id', 'asc'); 
+        $this->db->order_by('id', 'desc'); 
         return $this->db->get('media_filess')->result();
     }
 
@@ -234,13 +222,30 @@ class AdminModel extends CI_Model {
     {
         return $this->db->get_where('media_filess', ['id' => $id])->row();
     }
+    public function count_all_media_files()
+    {
+        return $this->db->count_all('media_filess'); 
+    }
+
+    public function get_media_files_paginated($limit, $start)
+    {
+        $this->db->from('media_filess'); 
+        $this->db->order_by('id', 'desc'); 
+        $this->db->limit($limit, $start);
+
+        $query = $this->db->get();
+        return $query->result();
+    }
+    // -------------user comments--------------
+    
+    public function get_uset_post_comments() {
+        $this->db->order_by('id', 'desc'); 
+        return $this->db->get('user_coments')->result();
+    }
    
 
-
-    
-
-
-    
-    
+    public function get_user_image_by_id($id){
+        return $this->db->get_where('users_image', ['id' => $id])->row();
+    }
 }
 ?>
