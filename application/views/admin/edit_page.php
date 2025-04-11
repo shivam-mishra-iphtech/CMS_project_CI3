@@ -99,7 +99,7 @@
 
                         <!-- Right Column -->
                         <div class="col-lg-4">
-                            <div class="card border mb-3">
+                            <!-- <div class="card border mb-3">
                                 <div class="card-body">
                                     <h6 class="card-title fw-bold mb-3">Page Category</h6>
                                     <select class="form-select select2 form-control-sm shadow-none" name="category"
@@ -115,7 +115,7 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Thumbnail Upload -->
                             <div class="card border mb-4">

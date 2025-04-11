@@ -42,24 +42,24 @@
 
                 <!-- Post Creation Form -->
                 <form class="add-new-page" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
+                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>"
+                        value="<?= $this->security->get_csrf_hash(); ?>">
                     <div class="row g-4">
-                        <div class="d-flex justify-content-between">
-                            <div class="text-start">
+                       
+
+                            <div class="d-flex justify-content-end gap-2 my-3">
                                 <a href="<?= site_url('AdminController/page_list'); ?>"
                                     class="btn btn-outline-secondary">
                                     <i class="bi bi-arrow-left me-2"></i>Back to List
                                 </a>
-                            </div>
-                            <div class="text-end">
                                 <button type="submit" class="btn btn-primary px-3">Save Page</button>
                             </div>
-                        </div>
+
+                       
 
                         <!-- Left Column -->
                         <div class="col-lg-8">
-                            <input type="hidden" name="user_id"
-                                value="<?= $this->session->userdata('user_id'); ?>">
+                            <input type="hidden" name="user_id" value="<?= $this->session->userdata('user_id'); ?>">
                             <div class="mb-4">
                                 <label for="title" class="form-label fw-bold">Page Title</label>
                                 <input type="text" class="form-control form-control-sm shadow-none" id="title"
@@ -87,8 +87,8 @@
                         </div>
 
                         <!-- Right Column -->
-                        <div class="col-lg-4">
-                            <div class="card border mb-3">
+                        <div class="col-lg-4 mt-3">
+                            <!-- <div class="card border mb-3">
                                 <div class="card-body">
                                     <h6 class="card-title fw-bold mb-3">Page Category</h6>
                                     <select class="form-select select2 form-control-sm shadow-none" name="category"
@@ -101,7 +101,7 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- Thumbnail Upload -->
                             <div class="card border mb-4">
                                 <div class="card-body">
@@ -147,19 +147,15 @@
 
 <?php include 'layouts/footer.php'; ?>
 
-
-
-
 <script>
     // Initialize Select2
     $(document).ready(function() {
         $('.select2').select2({
             placeholder: "Select Page Category",
             allowClear: true,
-            width: '100%' 
+            width: '100%'
         });
     });
-
     // Image Preview Functions
     function previewThumbnail(event) {
         const image = document.getElementById('imagePreview');
@@ -188,18 +184,14 @@
             reader.readAsDataURL(file);
         }
     }
-
-    $(document).ready(function () {
-        $('form.add-new-page').submit(function (e) {
+    $(document).ready(function() {
+        $('form.add-new-page').submit(function(e) {
             e.preventDefault();
-
             // Ensure CKEditor updates the content before submission
             if (typeof CKEDITOR !== "undefined" && CKEDITOR.instances.content) {
                 CKEDITOR.instances.content.updateElement();
             }
-
             var formData = new FormData(this);
-
             $.ajax({
                 url: "<?php echo site_url('AdminController/add_new_page'); ?>", // Fixed PHP echo
                 type: "POST",
@@ -208,27 +200,20 @@
                 contentType: false,
                 dataType: "json",
                 success: function(response) {
-                    
                     if (response.status === "success") {
-                        
                         console.log("Page added successfully!");
                         setTimeout(function() {
-                            window.location.href = "<?php echo site_url('AdminController/page_list'); ?>";
-                        }, 2000); 
-
+                            window.location.href =
+                                "<?php echo site_url('AdminController/page_list'); ?>";
+                        }, 2000);
                     } else {
-                        
                         console.log("failed to add new page !.");
                     }
                 },
                 error: function(xhr) {
-                    
                     console.log("Something went wrong!");
                 }
             });
         });
     });
-
-
-
 </script>

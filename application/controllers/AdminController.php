@@ -666,8 +666,8 @@ class AdminController extends CI_Controller
     }
     public function add_page()
 
-    {   $data['categories'] = $this->AdminModel->get_page_category();
-        $this->load->view('admin/add_page' , $data);
+    {   
+        $this->load->view('admin/add_page' );
 
     }
     public function add_new_page()
@@ -678,7 +678,7 @@ class AdminController extends CI_Controller
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('content', 'Content', 'required');
         $this->form_validation->set_rules('short_description', 'Short Description', 'required');
-        $this->form_validation->set_rules('category', 'Category', 'required');
+        
 
         if ($this->form_validation->run() == FALSE) {
             echo json_encode(['status' => 'error', 'message' => validation_errors()]);
@@ -752,21 +752,21 @@ class AdminController extends CI_Controller
     {
         $data['pages'] = $this->AdminModel->get_all_page();
 
-        if (!empty($data['pages'])) {
-            foreach ($data['pages'] as &$page) {
-                if (!empty($page->page_category)) {
-                    $this->db->where('id', $page->page_category);
-                    $query = $this->db->get('main_menu'); // Assuming 'categories' is the correct table name
-                    $category = $query->row(); // Fetch single row
+        // if (!empty($data['pages'])) {
+        //     foreach ($data['pages'] as &$page) {
+        //         if (!empty($page->page_category)) {
+        //             $this->db->where('id', $page->page_category);
+        //             $query = $this->db->get('main_menu'); // Assuming 'categories' is the correct table name
+        //             $category = $query->row(); // Fetch single row
                     
-                    if ($category) {
-                        $page->category_name = $category->menu_name; // Assuming 'name' is the category column
-                    } else {
-                        $page->category_name = 'Unknown';
-                    }
-                }
-            }
-        }
+        //             if ($category) {
+        //                 $page->category_name = $category->menu_name; // Assuming 'name' is the category column
+        //             } else {
+        //                 $page->category_name = 'Unknown';
+        //             }
+        //         }
+        //     }
+        // }
 
         $this->load->view('admin/page_list', $data);
     }
@@ -787,7 +787,7 @@ class AdminController extends CI_Controller
         }
     }
     public function edit_page($id){
-        $data['categories'] = $this->AdminModel->get_page_category();
+       
         $data['page']=$this->AdminModel->get_page_by_id($id);
         $this->load->view('admin/edit_page',$data);
     }
@@ -800,7 +800,7 @@ class AdminController extends CI_Controller
         $this->form_validation->set_rules('title', 'Title', 'required');
         $this->form_validation->set_rules('short_description', 'Short Description', 'required');
         $this->form_validation->set_rules('content', 'Content', 'required');
-        $this->form_validation->set_rules('category', 'Category', 'required');
+       
 
         if ($this->form_validation->run() == FALSE) {
             echo json_encode(['status' => 'error', 'message' => trim(validation_errors())]);
@@ -922,7 +922,7 @@ class AdminController extends CI_Controller
         exit;
     }
     public function view_page($id){
-        $data['categories'] = $this->AdminModel->get_page_category();
+        // $data['categories'] = $this->AdminModel->get_page_category();
         $data['page']=$this->AdminModel->get_page_by_id($id);
         $this->load->view('admin/view_page',$data);
     }

@@ -60,6 +60,8 @@ $autoload['packages'] = array();
 */
 $autoload['libraries'] = array('database', 'session', 'form_validation');
 $autoload['helper'] = array('url', 'form');
+$autoload['libraries'] = array('FooterLoader');
+
 
 
 

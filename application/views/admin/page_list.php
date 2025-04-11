@@ -24,7 +24,7 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="">Title</th>
-                                    <th class="text-center">Category</th>
+                                    <!-- <th class="text-center">Category</th> -->
                                     <th class="text-center">Publish</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -60,11 +60,11 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-center small">
+                                    <!-- <td class="text-center small">
                                         <span style="font-size:13px ; color: green;" class="badge bg-info bg-opacity-10">
                                             <?= $page->category_name  ?>
                                         </span>
-                                    </td>
+                                    </td> -->
                                     <td class="text-center align-middle">
                                         <div class="d-flex justify-content-center">
                                             <div class="form-check form-switch">

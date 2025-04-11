@@ -150,6 +150,9 @@
                     <li class="nav-item">
                         <a class="nav-link px-3" href="#">About Us</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3" href="<?= site_url('WebController/view_all_post')?>">My Blogs</a>
+                    </li>
                 </ul>
 
                 <ul class="navbar-nav ms-lg-3">

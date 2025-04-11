@@ -60,6 +60,13 @@ class UserModel extends CI_Model {
                           ->row();
         return $query ? $query->image : null;
     }
+
+    
+    public function get_user_image_by_id($user_id) {
+        return $this->db->get_where('users_image', ['user_id' => $user_id])->row();
+    }
+    
+
     public function update_password($id, $hashed_password) {
         $this->db->where('id', $id);
         $this->db->set('password', $hashed_password);
@@ -82,11 +89,14 @@ class UserModel extends CI_Model {
         $this->db->where('status',1);
         return $this->db->where('id', $id)->get('posts')->row();
     }
+    public function get_all_post() {
+        return $this->db->where('status', 1)
+           ->get('posts')->result();
+    }
     public function get_related_posts($id, $category) {
         return $this->db->where('status', 1)->where('id !=', $id)->where('category', $category)
-            ->limit(3)->get('posts')->result();
+            ->limit(10)->get('posts')->result();
     }
-    
     public function get_banners_by_type($type) {
         return $this->db->get_where('banner', ['banner_type' => $type, 'status'=>1])->result();
     }
@@ -96,12 +106,46 @@ class UserModel extends CI_Model {
     public function get_user_post_comment() {
         return $this->db->where([ 'status' => 1])->order_by('id', 'DESC')->limit(1)->get('user_coments')->row();
     } 
+    public function get_user_post_comment_by($post_id) {
+        return $this->db
+            ->where(['post_id' => $post_id, 'status' => 0])
+            ->order_by('id', 'DESC')
+           
+            ->get('user_coments')
+            ->result(); // use result() to get multiple comments, not row()
+    }
+    
+    public function get_all_categories() {
+        return $this->db
+           ->get('post_category')->result();
+    }
+    
+    
     public function add_post_comment($data){
        return $this->db->insert('user_coments', $data);
     }
     
     
     
-    
+    public function get_all_post_paginated($limit, $offset)
+    {
+        return $this->db->order_by('created_at', 'DESC')
+                        ->limit($limit, $offset)
+                        ->get('posts')
+                        ->result();
+    }
+    public function search_posts($query)
+    {
+        $this->db->like('post_title', $query);
+        $this->db->or_like('short_desc', $query);
+        $this->db->or_like('content', $query);
+        return $this->db->get('posts')->result(); // adjust 'posts' to your table name
+    }
+
+    public function get_post_count()
+    {
+        return $this->db->count_all('posts');
+    }
+
 }
 ?>
