@@ -1,5 +1,4 @@
 
-```markdown
 <p align="center">
   <img src="https://www.codeigniter.com/assets/icons/ci-logo.png" alt="CodeIgniter Logo" width="150" style="filter: drop-shadow(0 0 10px #ee4623)">
   
