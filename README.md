@@ -1,7 +1,10 @@
+Got it! The issue is because GitHub doesn’t render SVG images hosted on Wikimedia in the way you expect sometimes, especially if the link is directly to the raw file. To fix this, and make the CI icon appear properly, you can either:
+
 
 # 🚀 CI-DEMO-PROJECT
 
-![CodeIgniter](https://upload.wikimedia.org/wikipedia/commons/8/8b/CodeIgniter_logo.svg)
+![CodeIgniter Logo](https://www.codeigniter.com/assets/images/codeigniter4logo.png)
+
 > A mini CMS built with **CodeIgniter 3**, offering user authentication, admin dashboard, page and blog management, media handling, and more.
 
 ---
@@ -10,32 +13,32 @@
 - **Backend**: PHP (CodeIgniter 3)
 - **Database**: MySQL
 - **Frontend**: HTML5, CSS3, Bootstrap
-- **Libraries Used**: CodeIgniter Upload Library, Session Library
+- **Libraries**: CI Upload Library, Session Library
 
 ---
 
 ## 🔐 1. User Authentication System
 A secure login & registration module with proper session handling.
 
-✅ **Features**:
+### ✅ Features:
 - [x] User Registration  
 - [x] Secure Login & Logout  
 - [x] Password Hashing with `password_hash()`  
 - [x] Session-based authentication  
 - [x] Role-based access (Admin, Editor, User)
 
-🧑 **User Roles**:
+### 👥 User Roles:
 - **Admin** – Full access  
-- **Editor** – Manage content (WIP)  
+- **Editor** – Manage content *(Coming Soon)*  
 - **User** – View content  
 
 ---
 
 ## 🎛️ 2. Admin Panel
 
-A backend interface for site administrators.
+A backend interface for administrators.
 
-✅ **Features**:
+### ✅ Features:
 - [x] Dashboard: Total users, posts, pages  
 - [x] User Management (Add, Edit, Delete)  
 - [x] Role Assignment  
@@ -43,26 +46,26 @@ A backend interface for site administrators.
 
 ---
 
-## 📄 3. Page Management (CRUD)
+## 📄 3. Page Management
 
-Manage static pages like About Us, Contact, etc.
+CRUD operations for static pages like About Us, Contact, etc.
 
-✅ **Features**:
+### ✅ Features:
 - [x] Create/Edit/Delete Pages  
 - [x] SEO-friendly slugs  
 - [x] Draft & Publish status  
-- [x] Rich text content handling  
+- [x] WYSIWYG Editor support  
 
 ---
 
 ## 📝 4. Blog Module
 
-Post articles with categories and comments.
+Post articles with categories and user comments.
 
-✅ **Features**:
+### ✅ Features:
 - [x] Create/Edit/Delete Blog Posts  
 - [x] Category Management  
-- [x] Blog Comments System  
+- [x] Comment System  
 - [x] SEO URLs: `/blog/my-first-post`  
 - [x] Publish/Draft Modes  
 
@@ -70,29 +73,30 @@ Post articles with categories and comments.
 
 ## 🖼️ 5. Media Management
 
-Upload and manage files and images for posts/pages.
+Upload and manage media files for use in content.
 
-✅ **Features**:
+### ✅ Features:
 - [x] File Upload (images, PDFs)  
-- [x] File Validation (allowed types)  
-- [x] Use CI File Uploading Library  
+- [x] File Type Validation  
+- [x] Display media in content  
+- [x] Uses CodeIgniter’s Upload Library  
 - [x] Files stored in `/uploads/`  
 
 ---
 
 ## ⚙️ 6. Site Settings
 
-Basic site configuration from the admin panel.
+Basic site configuration handled via the admin panel.
 
-✅ **Features**:
+### ✅ Features:
 - [x] Site Title & Description  
-- [x] Contact Email  
+- [x] Contact Email *(Coming Soon)*  
 - [x] Social Media Links  
 - [x] Logo Upload  
 
 ---
 
-## 📂 Project Structure (CI 3)
+## 📁 Project Structure (CI 3)
 
 ```
 application/
@@ -109,33 +113,23 @@ index.php
 
 ---
 
-## 📸 Screenshots
+## 🖼️ Screenshots
 
-> *(Include screenshots here of login, dashboard, page editor, etc. for better appeal)*
+*(You can add screenshots here to make the README more visual)*
 
----
 
-## 📥 Installation
-
-```bash
-1. Clone the repo
-2. Import the SQL database
-3. Configure `application/config/config.php` & `database.php`
-4. Run the project in your local server (XAMPP/LAMP)
-```
-
----
 
 ## 🙌 Contributions
 
-Pull requests are welcome. For major changes, please open an issue first.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
 
 ---
 
-## 📄 License
+## 📜 License
 
 MIT © 2025 – [Your Name]
 
 ---
 
-### Made with ❤️ using CodeIgniter
+### Made with ❤️ using CodeIgniter 3
+```
