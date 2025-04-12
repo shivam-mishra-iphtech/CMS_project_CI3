@@ -1,13 +1,16 @@
 
 <p align="center">
   <img src="https://www.codeigniter.com/assets/icons/ci-logo.png" alt="CodeIgniter Logo" width="120">
-  <h1 align="center">🚀 CI-DEMO-PROJECT</h1>
+  <h1 align="center">🚀 CMS Project with CodeIgniter 3</h1>
   <p align="center">
-    <strong>A mini CMS built with CodeIgniter 3</strong><br>
-    Featuring user authentication, admin dashboard, page/blog/media management, and more.
+    <strong>A complete Content Management System</strong><br>
+    User authentication, admin dashboard, page/blog management, and media handling
   </p>
   
   <p align="center">
+    <a href="https://github.com/shivam-mishra-iphtech/CMS_project_CI3/tree/main">
+      <img src="https://img.shields.io/badge/View-GitHub-success?logo=github" alt="GitHub">
+    </a>
     <img src="https://img.shields.io/badge/CodeIgniter-3.x-orange?logo=codeigniter" alt="CI Version">
     <img src="https://img.shields.io/badge/PHP-7.4+-777BB4?logo=php" alt="PHP Version">
     <img src="https://img.shields.io/badge/MySQL-5.7+-4479A1?logo=mysql" alt="MySQL Version">
@@ -17,36 +20,48 @@
 
 ---
 
-## ✨ Key Features
+## ✨ Live Preview
 
 <div align="center">
   <table>
     <tr>
       <td align="center">
-        <b>🔐 Auth System</b><br>
-        Secure user authentication<br>with role-based access
+        <a href="https://drive.google.com/file/d/1l-E6lnAdx9Nfkog8AnSNnslfLGMlcPyD/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1l-E6lnAdx9Nfkog8AnSNnslfLGMlcPyD&sz=w200" width="150"><br>
+          <b>Login Page</b>
+        </a>
       </td>
       <td align="center">
-        <b>📝 Blog Engine</b><br>
-        Full-featured blog with<br>categories and comments
+        <a href="https://drive.google.com/file/d/1SzEDDVwPDM1QkEgQ6UfvGGlYX2a1qhxC/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1SzEDDVwPDM1QkEgQ6UfvGGlYX2a1qhxC&sz=w200" width="150"><br>
+          <b>Admin Dashboard</b>
+        </a>
       </td>
       <td align="center">
-        <b>🖼️ Media Manager</b><br>
-        File uploads with<br>validation and storage
+        <a href="https://drive.google.com/file/d/1zgS-KqJogf6h591KBJH97heYptuDfPOD/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1zgS-KqJogf6h591KBJH97heYptuDfPOD&sz=w200" width="150"><br>
+          <b>Page Editor</b>
+        </a>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <b>🎛️ Admin Panel</b><br>
-        Powerful dashboard with<br>user/content management
+        <a href="https://drive.google.com/file/d/1ch5YfR9UDXAlVEXhqQ2t9vmm7EhNfF9E/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1ch5YfR9UDXAlVEXhqQ2t9vmm7EhNfF9E&sz=w200" width="150"><br>
+          <b>Registration</b>
+        </a>
       </td>
       <td align="center">
-        <b>📄 Page Builder</b><br>
-        Create/edit pages with<br>WYSIWYG editor
+        <a href="https://drive.google.com/file/d/1W9F8FghP9Ub2C7RBzmmKAF-DSgc4ZaLM/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1W9F8FghP9Ub2C7RBzmmKAF-DSgc4ZaLM&sz=w200" width="150"><br>
+          <b>Page List</b>
+        </a>
       </td>
       <td align="center">
-        <b>⚙️ Site Config</b><br>
-        Customize settings and<br>appearance
+        <a href="https://drive.google.com/file/d/1mfCYaJaHrnjf5ersc2eUmqBo5Yz4ZwPJ/view?usp=drive_link">
+          <img src="https://drive.google.com/thumbnail?id=1mfCYaJaHrnjf5ersc2eUmqBo5Yz4ZwPJ&sz=w200" width="150"><br>
+          <b>Media Manager</b>
+        </a>
       </td>
     </tr>
   </table>
@@ -54,112 +69,148 @@
 
 ---
 
-## � Tech Stack
+## 🧰 Tech Stack
 
 <div align="center">
-  <img src="https://skillicons.dev/icons?i=php,codeigniter,mysql,html,css,bootstrap" alt="Tech Stack">
+  <img src="https://skillicons.dev/icons?i=php,codeigniter,mysql,html,css,bootstrap,jquery" alt="Tech Stack">
 </div>
 
 | Component       | Technology              |
 |-----------------|-------------------------|
 | **Backend**     | PHP 7.4+, CodeIgniter 3 |
 | **Database**    | MySQL 5.7+             |
-| **Frontend**    | Bootstrap 5, HTML5     |
-| **Libraries**   | CI Session, Upload     |
+| **Frontend**    | Bootstrap 5, jQuery    |
+| **Security**    | CSRF Protection, XSS Filtering |
+| **Libraries**   | CI Session, Upload, Form Validation |
 
 ---
 
-## 🛠️ Installation
+## 🔥 Key Features
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+  <div>
+    <h3>🔐 User Authentication</h3>
+    <ul>
+      <li>Secure registration/login system</li>
+      <li>Password hashing with bcrypt</li>
+      <li>Role-based access control (Admin/User)</li>
+      <li>Session management</li>
+    </ul>
+  </div>
+  
+  <div>
+    <h3>📝 Content Management</h3>
+    <ul>
+      <li>Create/edit/delete pages</li>
+      <li>WYSIWYG editor integration</li>
+      <li>SEO-friendly URLs</li>
+      <li>Draft/publish system</li>
+    </ul>
+  </div>
+  
+  <div>
+    <h3>🖼️ Media Handling</h3>
+    <ul>
+      <li>Image/file uploads</li>
+      <li>File type validation</li>
+      <li>Thumbnail generation</li>
+      <li>Organized media library</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+## 🛠️ Installation Guide
 
 ```bash
-# Clone repository
-git clone https://github.com/yourusername/ci-demo-project.git
+# Clone the repository
+git clone https://github.com/shivam-mishra-iphtech/CMS_project_CI3.git
 
-# Navigate to project
-cd ci-demo-project
+# Navigate to project directory
+cd CMS_project_CI3
 
-# Import database (adjust filename)
-mysql -u username -p database_name < ci-demo-project.sql
+# Import database (adjust credentials)
+mysql -u root -p database_name < database_dump.sql
 
-# Configure files
-nano application/config/database.php
-nano application/config/config.php
+# Set permissions
+chmod -R 755 uploads
+chmod 755 application/config
 ```
 
-### 🔧 Configuration
-1. Set base URL in `config.php`
-2. Update database credentials in `database.php`
-3. Ensure `uploads/` directory is writable
+### Configuration:
+1. Update `application/config/database.php` with your credentials
+2. Set base URL in `application/config/config.php`
+3. Configure email settings in `application/config/email.php`
 
 ---
 
-## 📸 Screenshots
+## 📁 Project Structure
 
-| Login Screen | Admin Dashboard | Page Editor |
-|--------------|-----------------|-------------|
-| <img src="screenshots/login.jpg" width="200"> | <img src="screenshots/dashboard.jpg" width="200"> | <img src="screenshots/editor.jpg" width="200"> |
-
----
-
-## 🏗️ Project Structure
-
-```bash
-ci-demo-project/
+```
+CMS_project_CI3/
 ├── application/
 │   ├── config/       # Configuration files
-│   ├── controllers/  # Application logic
+│   ├── controllers/  # App logic (Admin.php, Auth.php)
 │   ├── models/       # Database operations
-│   ├── views/        # Presentation layer
-│   └── ...           # Other CI directories
-├── system/           # CI core files
-├── uploads/          # User uploaded files
-├── .htaccess         # URL rewriting
+│   ├── views/        # Templates and layouts
+│   └── libraries/    # Custom libraries
+├── assets/
+│   ├── css/          # Custom styles
+│   ├── js/           # JavaScript files
+│   └── images/       # Static images
+├── uploads/          # User uploaded media
+├── system/           # CI core
 └── index.php         # Front controller
 ```
 
 ---
 
-## 🤝 Contributing
+## 🤝 How to Contribute
 
-We welcome contributions! Please follow these steps:
+We welcome contributions! Here's how:
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add awesome feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
 5. Open a Pull Request
+
+For bug reports, please open an [issue](https://github.com/shivam-mishra-iphtech/CMS_project_CI3/issues).
 
 ---
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 <p align="center">
-  <em>Made with ❤️ using CodeIgniter 3</em><br>
-  <a href="https://github.com/yourusername/ci-demo-project/stargazers">⭐ Star this project</a> | 
-  <a href="https://github.com/yourusername/ci-demo-project/issues">🐛 Report Bug</a> | 
-  <a href="https://github.com/yourusername/ci-demo-project/fork">⎘ Fork</a>
+  <em>Developed with ❤️ by Shivam Mishra</em><br>
+  <a href="https://github.com/shivam-mishra-iphtech/CMS_project_CI3">
+    <img src="https://img.shields.io/github/stars/shivam-mishra-iphtech/CMS_project_CI3?style=social" alt="GitHub Stars">
+  </a>
+  <a href="https://github.com/shivam-mishra-iphtech/CMS_project_CI3/fork">
+    <img src="https://img.shields.io/github/forks/shivam-mishra-iphtech/CMS_project_CI3?style=social" alt="GitHub Forks">
+  </a>
 </p>
 ```
 
-### Key Improvements:
+### Key Enhancements:
 
-1. **Added GitHub badges** for version and license info
-2. **Visual feature grid** for quick overview
-3. **Tech stack icons** using skillicons.dev
-4. **Better installation guide** with code blocks
-5. **Screenshot grid layout** (replace with actual images)
-6. **ASCII directory tree** for project structure
-7. **Enhanced footer** with GitHub actions
-8. **Consistent emoji usage** for visual scanning
-9. **Better tables** for tech stack comparison
-10. **More prominent contribution section**
+1. **Integrated all your screenshots** with proper thumbnails and links
+2. **Added GitHub repository badge** linking to your project
+3. **Improved feature showcase** with grid layout
+4. **Enhanced tech stack display** with icons
+5. **Detailed installation guide** with code blocks
+6. **Complete project structure** visualization
+7. **Social badges** for GitHub stars/forks
+8. **Responsive design** that works well on mobile
+9. **Better visual hierarchy** with consistent styling
+10. **Your name credited** in the footer
 
-To use this:
-1. Replace placeholder image paths with actual screenshots
-2. Update GitHub URLs with your actual repository
-3. Add your name to the license section
-4. Consider adding a demo link if available
+Note: For the Google Drive thumbnails to work properly, you may need to:
+1. Make sure the files are publicly accessible, or
+2. Upload the screenshots to your GitHub repository and use those links instead
+3. Consider using a service like imgur for hosting screenshots if you want better control
