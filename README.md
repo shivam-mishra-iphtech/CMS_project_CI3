@@ -1,11 +1,14 @@
-Got it! The issue is because GitHub doesn’t render SVG images hosted on Wikimedia in the way you expect sometimes, especially if the link is directly to the raw file. To fix this, and make the CI icon appear properly, you can either:
-
 
 # 🚀 CI-DEMO-PROJECT
 
-![CodeIgniter Logo](https://www.codeigniter.com/assets/images/codeigniter4logo.png)
+<p align="center">
+  <img src="https://www.codeigniter.com/assets/icons/ci-logo.png" alt="CodeIgniter Logo" width="120">
+</p>
 
-> A mini CMS built with **CodeIgniter 3**, offering user authentication, admin dashboard, page and blog management, media handling, and more.
+<p align="center">
+  <strong>A mini CMS built with CodeIgniter 3</strong><br>
+  Featuring user authentication, admin dashboard, page/blog/media management, and more.
+</p>
 
 ---
 
@@ -18,7 +21,6 @@ Got it! The issue is because GitHub doesn’t render SVG images hosted on Wikime
 ---
 
 ## 🔐 1. User Authentication System
-A secure login & registration module with proper session handling.
 
 ### ✅ Features:
 - [x] User Registration  
@@ -36,8 +38,6 @@ A secure login & registration module with proper session handling.
 
 ## 🎛️ 2. Admin Panel
 
-A backend interface for administrators.
-
 ### ✅ Features:
 - [x] Dashboard: Total users, posts, pages  
 - [x] User Management (Add, Edit, Delete)  
@@ -48,8 +48,6 @@ A backend interface for administrators.
 
 ## 📄 3. Page Management
 
-CRUD operations for static pages like About Us, Contact, etc.
-
 ### ✅ Features:
 - [x] Create/Edit/Delete Pages  
 - [x] SEO-friendly slugs  
@@ -59,8 +57,6 @@ CRUD operations for static pages like About Us, Contact, etc.
 ---
 
 ## 📝 4. Blog Module
-
-Post articles with categories and user comments.
 
 ### ✅ Features:
 - [x] Create/Edit/Delete Blog Posts  
@@ -73,20 +69,15 @@ Post articles with categories and user comments.
 
 ## 🖼️ 5. Media Management
 
-Upload and manage media files for use in content.
-
 ### ✅ Features:
 - [x] File Upload (images, PDFs)  
 - [x] File Type Validation  
 - [x] Display media in content  
-- [x] Uses CodeIgniter’s Upload Library  
 - [x] Files stored in `/uploads/`  
 
 ---
 
 ## ⚙️ 6. Site Settings
-
-Basic site configuration handled via the admin panel.
 
 ### ✅ Features:
 - [x] Site Title & Description  
@@ -96,7 +87,7 @@ Basic site configuration handled via the admin panel.
 
 ---
 
-## 📁 Project Structure (CI 3)
+## 📁 Project Structure
 
 ```
 application/
@@ -113,15 +104,26 @@ index.php
 
 ---
 
-## 🖼️ Screenshots
+## 📸 Screenshots
 
-*(You can add screenshots here to make the README more visual)*
+*(Add screenshots here of login, dashboard, page editor, etc.)*
 
+---
 
+## 📥 Installation Guide
+
+```bash
+1. Clone the repository
+2. Import the SQL file into your MySQL database
+3. Configure `application/config/config.php` and `database.php`
+4. Run the project using a local server (XAMPP/LAMP)
+```
+
+---
 
 ## 🙌 Contributions
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+Pull requests are welcome! For major changes, please open an issue first to discuss your idea.
 
 ---
 
@@ -131,5 +133,6 @@ MIT © 2025 – [Your Name]
 
 ---
 
-### Made with ❤️ using CodeIgniter 3
+<p align="center"><em>Made with ❤️ using CodeIgniter 3</em></p>
 ```
+
