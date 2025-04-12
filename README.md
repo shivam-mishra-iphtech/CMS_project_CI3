@@ -1,4 +1,5 @@
 
+```markdown
 <p align="center">
   <img src="https://www.codeigniter.com/assets/icons/ci-logo.png" alt="CodeIgniter Logo" width="150" style="filter: drop-shadow(0 0 10px #ee4623)">
   
@@ -158,4 +159,4 @@ graph LR
     box-shadow: 0 12px 20px rgba(0,0,0,0.1);
   }
 </style>
-\
+```
