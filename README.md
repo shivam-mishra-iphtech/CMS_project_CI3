@@ -1,8 +1,4 @@
-Here's a well-structured and attractive `README.md` file for your **CI-DEMO-PROJECT**, including CodeIgniter 3 icons and modern markdown elements. This version is GitHub-friendly and presents your project in a clean, professional way:
 
----
-
-```markdown
 # 🚀 CI-DEMO-PROJECT
 
 ![CodeIgniter](https://upload.wikimedia.org/wikipedia/commons/8/8b/CodeIgniter_logo.svg)
