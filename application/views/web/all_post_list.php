@@ -1,10 +1,9 @@
 <?php include 'layouts/header.php'; ?>
 
 <style>
-    /* Base Styles */
     .blog-card {
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        height: 100%;
+        height: 50%;
         overflow: hidden;
         border: none;
         border-radius: 8px;
@@ -213,6 +212,20 @@
         outline: none;
         box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
     }
+
+    #searchLoading {
+        display: none;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    #searchResults {
+        transition: opacity 0.3s ease;
+    }
+
+    .searching #searchResults {
+        opacity: 0.5;
+    }
 </style>
 
 <!-- Main Content Section -->
@@ -223,104 +236,52 @@
             <h1 class="display-5 fw-bold mb-3">Our Blog</h1>
             <p class="lead text-muted mb-4">Discover the latest articles and news</p>
             <form id="searchForm" class="d-flex mt-4 search-form">
-                <input id="searchInput" class="form-control me-2 py-2" type="search" placeholder="Search articles..." aria-label="Search">
+                <input id="searchInput" value="<?= htmlspecialchars($current_search ?? '') ?>"
+                    class="form-control me-2 py-2" type="search" placeholder="Search articles..." aria-label="Search"
+                    autocomplete="off">
                 <button class="btn btn-primary px-4" type="submit">
                     <i class="fas fa-search me-1"></i> Search
                 </button>
             </form>
+        </div>
 
-<!-- Display AJAX results here -->
-<div id="searchResults" class="mt-4"></div>
-
+        <!-- Loading Indicator -->
+        <div id="searchLoading" class="text-center py-3" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
         </div>
 
         <!-- Category Filter -->
         <div class="mb-5 category-filter">
             <div class="d-flex flex-wrap justify-content-center">
-                <a href="#" class="btn btn-sm btn-primary active">All</a>
-                <?php 
-                    if(!empty($categories)):
-                        foreach($categories as $category):
-                ?>
-                <a href="#" class="btn btn-sm btn-outline-primary"><?= htmlspecialchars($category->category_name)?></a>
-                <?php 
-                        endforeach;
-                    endif;    
+                <a href="#" data-category=""
+                    class="category-btn btn btn-sm <?= empty($current_category) ? 'btn-primary active' : 'btn-outline-primary' ?>">All</a>
+                <?php
+                if (!empty($categories)):
+                    foreach ($categories as $category):
+                        ?>
+                        <a href="#" data-category="<?= htmlspecialchars($category->category_name) ?>"
+                            class="category-btn btn btn-sm <?= ($current_category == $category->category_name) ? 'btn-primary active' : 'btn-outline-primary' ?>">
+                            <?= htmlspecialchars($category->category_name) ?>
+                        </a>
+                    <?php
+                    endforeach;
+                endif;
                 ?>
             </div>
         </div>
 
         <!-- Blog Posts Grid -->
-        <div class="row g-4">
-            <!-- Blog Post 1 -->
-            <?php 
-                if (!empty($all_posts)):
-                    foreach($all_posts as $post):
-                ?>
-            <div class="col-md-6 col-lg-4 blog-post" style="animation: fadeInUp 0.6s ease forwards 0.1s;">
-                <div class="blog-card card shadow-sm h-100">
-                    <div class="position-relative overflow-hidden">
-                        <?php
-                                    $thumbnail = !empty($post->thumbnail) 
-                                        ? base_url('public/postImages/' . $post->thumbnail) 
-                                        : base_url('public/postImages/default.jpg');
-                                ?>
-                        <img src="<?= $thumbnail ?>" class="card-img-top" alt="Post Thumbnail">
-                        <span class="category-badge badge bg-primary"><?= htmlspecialchars($post->category) ?></span>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex mb-3">
-                            <small class="text-muted">
-                                <i class="far fa-calendar-alt me-1"></i>
-                                <?= date('M d, Y', strtotime($post->created_at)) ?>
-                            </small>
-                            <small class="text-muted ms-3">
-                                <i class="far fa-eye me-1"></i> 1.2k views
-                            </small>
-                        </div>
-
-                        <h2 class="h5 card-title">
-                            <a href="#" class="text-decoration-none text-dark stretched-link">
-                                <?= htmlspecialchars($post->post_title) ?>
-                            </a>
-                        </h2>
-
-                        <p class="card-text text-muted">
-                            <?php
-                                        $content = strip_tags(json_decode($post->content));
-                                        $short = strlen($content) > 100 ? substr($content, 0, 150) . '...' : $content;
-                                        echo htmlspecialchars($short);
-                                    ?>
-                        </p>
-
-                        <div class="d-flex align-items-center mt-3">
-                            <?php if (!empty($post->user_image)) : ?>
-                            <img src="<?= base_url('public/userImage/' . $post->user_image) ?>"
-                                class="rounded-circle me-2" width="30" height="30" alt="Author">
-                            <?php else : ?>
-                            <i class="bi bi-person-circle me-2" style="font-size: 30px;"></i>
-                            <?php endif; ?>
-                            <small class="text-muted"><?= htmlspecialchars($post->author) ?></small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php 
-                    endforeach;
-                endif; 
-                ?>
-
-            <!-- Pagination -->
-            <div class="mt-5">
-                <nav aria-label="Blog pagination">
-                    <?= $pagination_links ?>
-                </nav>
-            </div>
-
+        <div id="searchResults">
+            <?php include 'layouts/blog_search_result.php' ?>
         </div>
+
+        <!-- Pagination -->
+
+    </div>
 </section>
 
-<!-- Newsletter Section -->
 <section class="py-5 newsletter-section text-white">
     <div class="container text-center position-relative">
         <h2 class="h4 mb-3">Stay updated with our newsletter</h2>
@@ -340,55 +301,142 @@
 </section>
 
 <?php include 'layouts/footer.php'; ?>
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
 
 <script>
-    // Add intersection observer for scroll animations
-    document.addEventListener('DOMContentLoaded', function() {
-        const blogPosts = document.querySelectorAll('.blog-post');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-        blogPosts.forEach(post => {
-            observer.observe(post);
-        });
-        // Add hover effect to category filter buttons
-        const filterButtons = document.querySelectorAll('.category-filter .btn');
-        filterButtons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                if (!button.classList.contains('active')) {
-                    button.classList.add('shadow-sm');
-                }
-            });
-            button.addEventListener('mouseleave', () => {
-                button.classList.remove('shadow-sm');
-            });
-        });
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('#searchForm').on('submit', function(e) {
-        e.preventDefault(); // prevent normal form submission
+    document.addEventListener('DOMContentLoaded', function () {
+        // Existing animation code...
 
-        let query = $('#searchInput').val();
+        let searchTimeout;
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        const searchResults = document.getElementById('searchResults');
+        const searchLoading = document.getElementById('searchLoading');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const container = document.querySelector('.container');
 
-        $.ajax({
-            url: '<?= site_url("WebController/search_posts") ?>',
-            type: 'POST',
-            data: { query: query },
-            success: function(response) {
-                $('#searchResults').html(response);
-            },
-            error: function() {
-                $('#searchResults').html('<div class="alert alert-danger">Something went wrong.</div>');
+        // Real-time search function
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            const activeCategory = document.querySelector('.category-btn.active')?.dataset.category || '';
+
+            searchLoading.style.display = 'block';
+            container.classList.add('searching');
+
+            clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(() => {
+                const url = new URL('<?= site_url('WebController/search_posts') ?>', window.location.origin);
+
+                if (searchTerm) {
+                    url.searchParams.set('search', searchTerm);
+                }
+
+                if (activeCategory) {
+                    url.searchParams.set('category', activeCategory);
+                }
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        searchResults.innerHTML = html;
+                        animatePosts();
+                        updateURL(searchTerm, activeCategory);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        searchResults.innerHTML = '<div class="alert alert-danger">Error loading results</div>';
+                    })
+                    .finally(() => {
+                        searchLoading.style.display = 'none';
+                        container.classList.remove('searching');
+                    });
+            }, 500); // 500ms delay after typing stops
+        }
+
+        // Animate newly loaded posts
+        function animatePosts() {
+            const posts = document.querySelectorAll('.blog-post');
+            posts.forEach((post, index) => {
+                post.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
+                post.style.opacity = '0';
+                post.style.transform = 'translateY(30px)';
+            });
+        }
+
+        // Update URL without reload
+        function updateURL(search, category) {
+            const url = new URL(window.location.pathname, window.location.origin);
+
+            if (search) {
+                url.searchParams.set('search', search);
+            } else {
+                url.searchParams.delete('search');
             }
+
+            if (category) {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
+
+            window.history.pushState({}, '', url);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', performSearch);
+
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            performSearch();
         });
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Update active state
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('active', 'btn-primary');
+                    btn.classList.add('btn-outline-primary');
+                });
+
+                this.classList.add('active', 'btn-primary');
+                this.classList.remove('btn-outline-primary');
+
+                // Perform search
+                performSearch();
+            });
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const categoryParam = urlParams.get('category');
+
+            if (searchParam !== null) {
+                searchInput.value = searchParam;
+            } else {
+                searchInput.value = '';
+            }
+
+            categoryButtons.forEach(button => {
+                button.classList.remove('active', 'btn-primary');
+                button.classList.add('btn-outline-primary');
+
+                if ((button.dataset.category === categoryParam) ||
+                    (!categoryParam && button.dataset.category === '')) {
+                    button.classList.add('active', 'btn-primary');
+                    button.classList.remove('btn-outline-primary');
+                }
+            });
+
+            performSearch();
+        });
+
+        // Initial animation of posts
+        animatePosts();
     });
 </script>

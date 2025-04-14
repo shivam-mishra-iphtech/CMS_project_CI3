@@ -220,11 +220,17 @@
                         </ul>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="<?php echo site_url('MenuController/manage_menus')?>">
+                        <a class="nav-link" href="<?php echo site_url('AdminController/menu_management')?>">
                             <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
                             Menus
                         </a>
                     </li>
+                    <!-- <li class="nav-item mx-2">
+                        <a class="nav-link" href="<?php echo site_url('MenuController/menu_management')?>">
+                            <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>
+                            Menus11111
+                        </a>
+                    </li> -->
                     <!-- <li class="nav-item mx-2">
                         <a class="nav-link" href="<?php echo site_url('AdminController/page_category')?>">
                         <i class="bi bi-menu-button-wide-fill fs-5 me-2"></i>

@@ -11,6 +11,7 @@ class AdminController extends CI_Controller
     public $AdminModel;
     public $upload;
     public $pagination;
+    public $Menu_model;
 
     public function __construct()
     {
@@ -19,6 +20,7 @@ class AdminController extends CI_Controller
         $this->db = $this->load->database();
         $this->load->model('UserModel');
         $this->load->model('AdminModel');
+        $this->load->model('Menu_model');
         $this->load->helper(['form', 'url']);
         $this->load->library(['session', 'form_validation', 'upload']);
     }
@@ -323,6 +325,8 @@ class AdminController extends CI_Controller
             $this->load->view('admin/add_post');
             return;
         }
+        $title= $this->input->post('title');
+        $slug = $this->AdminModel->generate_slug($title);
 
         $upload_path = BASEPATH . '../public/postImages/';
         if (!is_dir($upload_path)) {
@@ -374,6 +378,7 @@ class AdminController extends CI_Controller
             'short_desc' => json_encode($this->input->post('short_description', TRUE)),
             'content' => json_encode($this->input->post('content', TRUE)),
             'category' => $this->input->post('category', TRUE),
+            'slug'=> $slug,
             'thumbnail' => $thumbnail_image,
             'featured_image' => $featured_image,
         ];
@@ -684,6 +689,8 @@ class AdminController extends CI_Controller
             echo json_encode(['status' => 'error', 'message' => validation_errors()]);
             return;
         }
+        $title= $this->input->post('title');
+        $slug = $this->AdminModel->generate_slug($title);
 
         $upload_path = BASEPATH . '../public/pageImages/';
         if (!is_dir($upload_path)) {
@@ -737,6 +744,7 @@ class AdminController extends CI_Controller
             'page_content'   => json_encode($this->input->post('content', TRUE)),
             'short_desc'     => json_encode($this->input->post('short_description', TRUE)),
             'page_category'  => $this->input->post('category', TRUE),
+            'slug'           => $slug,
             'image_1'        => $image_1,
             'image_2'        => $image_2,
         ];
@@ -1101,6 +1109,120 @@ class AdminController extends CI_Controller
         } else {
             echo json_encode(["status" => "error", "message" => "Invalid comment ID!"]);
         }
+    }
+
+
+
+   
+    public function menu_management() {
+
+
+
+        
+        $data = [
+            'menus' => $this->Menu_model->get_menu_items(),
+            'pages' => $this->Menu_model->get_active_pages(),
+            'posts' => $this->Menu_model->get_active_posts(),
+            'categories' => $this->Menu_model->get_active_categories()
+        ];
+        
+       
+        $this->load->view('admin/manage_menu', $data);
+       
+    }
+
+    // Save menu item (AJAX)
+    public function save_menu() {
+        $this->form_validation->set_rules('menu_name', 'Menu Name', 'required');
+        $this->form_validation->set_rules('menu_position', 'Menu Position', 'required');
+        
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode(['success' => false, 'errors' => validation_errors()]);
+            return;
+        }
+
+        $data = [
+            'user_id' => $this->session->userdata('user_id'),
+            'menu_name' => $this->input->post('menu_name'),
+            'title' => $this->input->post('menu_name'), // Can be different if needed
+            'menu_position' => $this->input->post('menu_position'),
+            'is_active' => 1,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        // Handle link type
+        $link_type = $this->input->post('link_type');
+        $data['menu_type'] = $link_type;
+        
+        switch ($link_type) {
+            case 'page':
+                $data['object_id'] = $this->input->post('page_id');
+                $page = $this->db->get_where('pages', ['id' => $data['object_id']])->row();
+                $data['url'] = 'page/'.$page->slug;
+                break;
+                
+            case 'post':
+                $data['object_id'] = $this->input->post('post_id');
+                $post = $this->db->get_where('posts', ['id' => $data['object_id']])->row();
+                $data['url'] = 'post/'.$post->slug;
+                break;
+                
+            case 'category':
+                $data['object_id'] = $this->input->post('category_id');
+                $category = $this->db->get_where('post_category', ['id' => $data['object_id']])->row();
+                $data['url'] = 'category/'.$category->id;
+                break;
+                
+            case 'custom':
+                $data['url'] = $this->input->post('custom_url');
+                $data['object_id'] = null;
+                break;
+        }
+
+        // Handle parent/child relationship
+        if ($this->input->post('parent_id')) {
+            $data['parent_id'] = $this->input->post('parent_id');
+        } else {
+            $data['parent_id'] = 0;
+        }
+
+        // Handle new tab
+        $data['newtab'] = $this->input->post('newtab') ? 1 : 0;
+
+        // Get max sort order for this position and parent
+        $this->db->select_max('sort_order');
+        $this->db->where('menu_position', $data['menu_position']);
+        $this->db->where('parent_id', $data['parent_id']);
+        $max_order = $this->db->get('menu_items')->row()->sort_order;
+        $data['sort_order'] = $max_order ? $max_order + 1 : 1;
+
+        // Check if editing existing menu
+        if ($id = $this->input->post('id')) {
+            $data['id'] = $id;
+        }
+
+        $result = $this->Menu_model->save_menu($data);
+        echo json_encode(['success' => 'status',  'Menu saved successfully']);
+    }
+
+    // Delete menu item (AJAX)
+    public function delete_menu() {
+        $id = $this->input->post('id');
+        $result = $this->Menu_model->delete_menu($id);
+        echo json_encode($result);
+    }
+
+    // Reorder menu items (AJAX)
+    public function reorder_menu() {
+        $items = $this->input->post('items');
+        $result = $this->Menu_model->reorder_menu($items);
+        echo json_encode(['success' => $result]);
+    }
+
+    // Get menu item data for editing (AJAX)
+    public function get_menu_item($id) {
+        $item = $this->Menu_model->get_menu_item($id);
+        echo json_encode($item);
     }
    
     

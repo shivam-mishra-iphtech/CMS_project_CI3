@@ -125,27 +125,52 @@ class UserModel extends CI_Model {
        return $this->db->insert('user_coments', $data);
     }
     
+    public function get_all_post_paginated($limit, $offset, $search = null, $category = null)
+{
+    $this->db->select('posts.*');
+    $this->db->from('posts');
+    $this->db->order_by('created_at', 'DESC');
     
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->like('posts.post_title', $search);
+        $this->db->or_like('posts.content', $search);
+        $this->db->or_like('posts.created_at', $search);
+        $this->db->or_like('posts.updated_at', $search);
+        $this->db->group_end();
+    }
     
-    public function get_all_post_paginated($limit, $offset)
-    {
-        return $this->db->order_by('created_at', 'DESC')
-                        ->limit($limit, $offset)
-                        ->get('posts')
-                        ->result();
+    if (!empty($category)) {
+        $this->db->join('post_category', 'post_category.id = posts.category');
+        $this->db->where('post_category.category_name', $category);
     }
-    public function search_posts($query)
-    {
-        $this->db->like('post_title', $query);
-        $this->db->or_like('short_desc', $query);
-        $this->db->or_like('content', $query);
-        return $this->db->get('posts')->result(); // adjust 'posts' to your table name
-    }
+    
+    $this->db->limit($limit, $offset);
+    return $this->db->get()->result();
+}
 
-    public function get_post_count()
-    {
-        return $this->db->count_all('posts');
+public function get_post_count($search = null, $category = null)
+{
+    $this->db->from('posts');
+    
+    if (!empty($search)) {
+        $this->db->group_start();
+        $this->db->like('post_title', $search);
+        $this->db->or_like('content', $search);
+        $this->db->group_end();
     }
+    
+    if (!empty($category)) {
+        $this->db->join('post_category', 'post_category.id = posts.category');
+        $this->db->where('post_category.category_name', $category);
+    }
+    
+    return $this->db->count_all_results();
+}
+   
+
+       
+    
 
 }
 ?>

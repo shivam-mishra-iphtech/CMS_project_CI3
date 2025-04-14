@@ -5,6 +5,11 @@ class AdminModel extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
+    function generate_slug($string) {
+        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', strtolower($string));
+        return trim($slug, '-');
+    }
+    
     
     public function get_all_users() {
         $this->db->where('role <>', 2); 

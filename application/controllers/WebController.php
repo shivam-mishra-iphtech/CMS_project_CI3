@@ -8,6 +8,7 @@ class WebController extends CI_Controller
     public $form_validation;
     public $UserModel;
     public $upload;
+    public $AdminModel;
 
     public function __construct()
     {
@@ -349,11 +350,19 @@ class WebController extends CI_Controller
     {
         $this->load->library('pagination');
 
-        $config['base_url'] = site_url('WebController/view_all_post');
-        $config['total_rows'] = $this->UserModel->get_post_count();
-        $config['per_page'] = 6; // Number of posts per page
+        // Get search and category parameters
+        $search = $this->input->get('search');
+        $category = $this->input->get('category');
 
-        // Bootstrap Pagination Styling
+        // Configure pagination
+        $config['base_url'] = site_url('WebController/view_all_post');
+        $config['total_rows'] = $this->UserModel->get_post_count($search, $category);
+        $config['per_page'] = 4;
+        $config['reuse_query_string'] = TRUE;
+        $config['page_query_string'] = TRUE;
+        $config['query_string_segment'] = 'page';
+
+        // Bootstrap Pagination Styling (keep your existing styling)
         $config['full_tag_open'] = '<ul class="pagination justify-content-center">';
         $config['full_tag_close'] = '</ul>';
 
@@ -383,13 +392,15 @@ class WebController extends CI_Controller
 
         $this->pagination->initialize($config);
 
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $data['all_posts'] = $this->UserModel->get_all_post_paginated($config['per_page'], $page);
+        $page = $this->input->get('page') ? $this->input->get('page') : 0;
+        $data['all_posts'] = $this->UserModel->get_all_post_paginated($config['per_page'], $page, $search, $category);
         $data['categories'] = $this->UserModel->get_all_categories();
         $data['logo'] = $this->UserModel->get_logo('Site Logo');
         $data['pagination_links'] = $this->pagination->create_links();
+        $data['current_search'] = $search;
+        $data['current_category'] = $category;
 
-        // Process post data (optional)
+        // Process post data
         if (!empty($data['all_posts'])) {
             foreach ($data['all_posts'] as $post) {
                 $post_category = $this->db->get_where('post_category', ['id' => $post->category])->row();
@@ -403,35 +414,44 @@ class WebController extends CI_Controller
             }
         }
 
+        // Check if it's an AJAX request
+        if ($this->input->is_ajax_request()) {
+            $this->load->view('web/layouts/blog_search_result', $data);
+            return;
+        }
+
         $this->load->view('web/all_post_list', $data);
     }
+
+    // Add a new method for AJAX search
     public function search_posts()
     {
-        $this->load->model('Post_model');
-        $query = $this->input->post('query');
+        $search = $this->input->get('search');
+        $category = $this->input->get('category');
 
-        $data['posts'] = $this->Post_model->search_posts($query);
+        $data['all_posts'] = $this->UserModel->get_all_post_paginated(100, 0, $search, $category);
 
-        $this->load->view('partials/search_results', $data); // return partial view
+        // Process post data
+        if (!empty($data['all_posts'])) {
+            foreach ($data['all_posts'] as $post) {
+                $post_category = $this->db->get_where('post_category', ['id' => $post->category])->row();
+                $post->category = $post_category ? $post_category->category_name : 'New';
+
+                $post_user = $this->db->get_where('user', ['id' => $post->user_id])->row();
+                $post->author = $post_user ? $post_user->name : 'Unknown';
+
+                $post_user_image = $this->db->get_where('users_image', ['user_id' => $post->user_id])->row();
+                $post->user_image = $post_user_image ? $post_user_image->image : null;
+            }
+        }
+
+        $this->load->view('web/layouts/blog_search_result', $data);
     }
-
-
-
-
-
-
-
-
-
-
-
     public function view_page()
     {
 
         $this->load->view('web/pages');
     }
-
-
     public function add_user_comment()
     {
         if ($this->input->is_ajax_request()) {

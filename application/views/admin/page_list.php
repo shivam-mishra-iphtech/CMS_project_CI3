@@ -53,7 +53,7 @@
                                                 <p class="text-muted mb-0 small text-truncate"
                                                     style="max-width: 300px;">
                                                     <?php
-                                                        $content = strip_tags(htmlspecialchars_decode($page->page_content));
+                                                        $content = strip_tags(json_decode($page->page_content));
                                                         echo strlen($content) > 40 ? substr($content, 0, 40) . '...' : $content;
                                                     ?>
                                                 </p>
