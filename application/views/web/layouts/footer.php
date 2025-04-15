@@ -32,10 +32,10 @@
         <div class="d-flex justify-content-center">
             <?php if (!empty($this->footer_data['social_media'])): ?>
                 <?php foreach ($this->footer_data['social_media'] as $media): ?>
-                <a href="<?= $media->media_link ?>" class="me-3 text-reset social-icon" target="_blank"
-                    title="<?= ucfirst($media->media_name) ?>">
-                    <i class="fs-4 <?= $media->icon_class ?>" style="color: <?= $media->icon_color ?>"></i>
-                </a>
+                    <a href="<?= $media->media_link ?>" class="me-3 text-reset social-icon" target="_blank"
+                        title="<?= ucfirst($media->media_name) ?>">
+                        <i class="fs-4 <?= $media->icon_class ?>" style="color: <?= $media->icon_color ?>"></i>
+                    </a>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
@@ -55,24 +55,10 @@
                     </p>
                 </div>
 
-                <!-- Quick Links Column -->
-                <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">Quick Links</h6>
-                    <p><a href="<?php echo site_url('WebController/registration'); ?>" class="text-reset footer-link">Register</a></p>
-                    <p><a href="<?php echo site_url('WebController/login'); ?>" class="text-reset footer-link">Login</a></p>
-                    <p><a href="#profile" class="text-reset footer-link">Profile</a></p>
-                </div>
+                <?php $this->load->helper('menu'); ?>
+                <?php echo load_footer_menu(); ?>
 
-                <!-- Resources Column -->
-                <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mb-4">
-                    <h6 class="text-uppercase fw-bold mb-4">Resources</h6>
-                    <p><a href="#contact" class="text-reset footer-link">Contact</a></p>
-                    <p><a href="<?php echo site_url('WebController/view_page')?>" class="text-reset footer-link">About Us</a></p>
-                    <p><a href="#terms" class="text-reset footer-link">Terms & Conditions</a></p>
-                    <p><a href="#policy" class="text-reset footer-link">Privacy Policy</a></p>
-                </div>
-
-                <!-- Contact Column -->
+                <!-- Static Contact Column -->
                 <div class="col-md-6 col-lg-4 col-xl-3 mx-auto mb-md-0 mb-4">
                     <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
                     <p><i class="logo_icon bi bi-house-door me-3"></i> Lucknow, UP, India</p>
@@ -98,9 +84,9 @@
 
 <!-- Dropdown Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.dropdown-submenu > a').forEach(function(element) {
-            element.addEventListener('click', function(e) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.dropdown-submenu > a').forEach(function (element) {
+            element.addEventListener('click', function (e) {
                 if (window.innerWidth < 992) {
                     const nextEl = this.nextElementSibling;
                     if (nextEl && nextEl.classList.contains('dropdown-menu')) {
@@ -115,14 +101,14 @@
 
 <!-- File Input Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const fileInput = document.getElementById('fileInput');
         if (fileInput) {
-            fileInput.addEventListener('change', function(e) {
+            fileInput.addEventListener('change', function (e) {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const preview = document.querySelector('.upload-preview');
                         if (preview) {
                             preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
@@ -137,15 +123,15 @@
 
 <!-- Alert System Script -->
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Check for normal flash messages
         let successMessage = "<?php echo isset($_SESSION['success']) ? addslashes($_SESSION['success']) : ''; ?>";
         let errorMessage = "<?php echo isset($_SESSION['error']) ? addslashes($_SESSION['error']) : ''; ?>";
-        
+
         if (successMessage) {
             showAlert(successMessage, 'success', '#alert-message', '#alert-icon', '#alert-text');
             <?php unset($_SESSION['success']); ?>
-        } 
+        }
         if (errorMessage) {
             showAlert(errorMessage, 'danger', '#alert-message', '#alert-icon', '#alert-text');
             <?php unset($_SESSION['error']); ?>
@@ -157,9 +143,9 @@
         const alertBox = $(alertId);
         const alertIcon = $(iconId);
         const alertText = $(textId);
-        
+
         alertText.text(message);
-        
+
         const alertStyles = {
             success: {
                 bg: "#d4edda",
@@ -186,23 +172,23 @@
                 icon: "fas fa-exclamation-triangle"
             }
         };
-        
+
         const style = alertStyles[type] || alertStyles.info;
-        
+
         alertBox.css({
             "background": style.bg,
             "color": style.color,
             "border-left": style.border
         });
-        
+
         alertIcon.removeClass().addClass(style.icon);
-        
+
         // Show alert
         alertBox.css({
             "opacity": "1",
             "right": "20px"
         });
-        
+
         // Auto close after 5 seconds
         setTimeout(() => closeAlert(alertId), 5000);
     }
@@ -215,16 +201,16 @@
     }
 
     // AJAX response handling
-    $(document).ajaxComplete(function(event, xhr, settings) {
+    $(document).ajaxComplete(function (event, xhr, settings) {
         try {
             const response = xhr.responseJSON;
             if (response) {
                 if (response.status === "success") {
-                    showAlert(response.message || "Operation successful!", "success", 
-                            '#alert-message-ajax', '#alert-icon-ajax', '#alert-text-ajax');
+                    showAlert(response.message || "Operation successful!", "success",
+                        '#alert-message-ajax', '#alert-icon-ajax', '#alert-text-ajax');
                 } else if (response.status === "error") {
-                    showAlert(response.message || "An error occurred!", "danger", 
-                            '#alert-message-ajax', '#alert-icon-ajax', '#alert-text-ajax');
+                    showAlert(response.message || "An error occurred!", "danger",
+                        '#alert-message-ajax', '#alert-icon-ajax', '#alert-text-ajax');
                 }
             }
         } catch (e) {
@@ -233,9 +219,9 @@
     });
 
     // Delete confirmation
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.btn-delete-user').forEach(button => {
-            button.addEventListener('click', function(event) {
+            button.addEventListener('click', function (event) {
                 event.preventDefault();
                 let deleteUrl = this.getAttribute('href');
                 Swal.fire({
@@ -261,7 +247,7 @@
         let file = event.target.files[0];
         if (file) {
             let reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 let preview = document.getElementById('imagePreview');
                 if (preview) {
                     preview.src = e.target.result;
@@ -288,7 +274,9 @@
     }
 
     @media (max-width: 768px) {
-        #alert-message, #alert-message-ajax {
+
+        #alert-message,
+        #alert-message-ajax {
             bottom: 10px;
             right: 10px;
             left: 10px;
@@ -319,4 +307,143 @@
     }
 </style>
 </body>
+
 </html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Existing animation code...
+
+        let searchTimeout;
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        const searchResults = document.getElementById('searchResults');
+        const searchLoading = document.getElementById('searchLoading');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const container = document.querySelector('.container');
+
+        // Real-time search function
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+            const activeCategory = document.querySelector('.category-btn.active')?.dataset.category || '';
+
+            searchLoading.style.display = 'block';
+            container.classList.add('searching');
+
+            clearTimeout(searchTimeout);
+
+            searchTimeout = setTimeout(() => {
+                const url = new URL('<?= site_url('WebController/search_posts') ?>', window.location.origin);
+
+                if (searchTerm) {
+                    url.searchParams.set('search', searchTerm);
+                }
+
+                if (activeCategory) {
+                    url.searchParams.set('category', activeCategory);
+                }
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        searchResults.innerHTML = html;
+                        animatePosts();
+                        updateURL(searchTerm, activeCategory);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        searchResults.innerHTML = '<div class="alert alert-danger">Error loading results</div>';
+                    })
+                    .finally(() => {
+                        searchLoading.style.display = 'none';
+                        container.classList.remove('searching');
+                    });
+            }, 500); // 500ms delay after typing stops
+        }
+
+        // Animate newly loaded posts
+        function animatePosts() {
+            const posts = document.querySelectorAll('.blog-post');
+            posts.forEach((post, index) => {
+                post.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
+                post.style.opacity = '0';
+                post.style.transform = 'translateY(30px)';
+            });
+        }
+
+        // Update URL without reload
+        function updateURL(search, category) {
+            const url = new URL(window.location.pathname, window.location.origin);
+
+            if (search) {
+                url.searchParams.set('search', search);
+            } else {
+                url.searchParams.delete('search');
+            }
+
+            if (category) {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
+
+            window.history.pushState({}, '', url);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', performSearch);
+
+        searchForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            performSearch();
+        });
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Update active state
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('active', 'btn-primary');
+                    btn.classList.add('btn-outline-primary');
+                });
+
+                this.classList.add('active', 'btn-primary');
+                this.classList.remove('btn-outline-primary');
+
+                // Perform search
+                performSearch();
+            });
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const categoryParam = urlParams.get('category');
+
+            if (searchParam !== null) {
+                searchInput.value = searchParam;
+            } else {
+                searchInput.value = '';
+            }
+
+            categoryButtons.forEach(button => {
+                button.classList.remove('active', 'btn-primary');
+                button.classList.add('btn-outline-primary');
+
+                if ((button.dataset.category === categoryParam) ||
+                    (!categoryParam && button.dataset.category === '')) {
+                    button.classList.add('active', 'btn-primary');
+                    button.classList.remove('btn-outline-primary');
+                }
+            });
+
+            performSearch();
+        });
+
+        // Initial animation of posts
+        animatePosts();
+    });
+</script>

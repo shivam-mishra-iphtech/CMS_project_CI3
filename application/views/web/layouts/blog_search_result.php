@@ -26,7 +26,7 @@
                         </div>
 
                         <h2 class="h5 card-title">
-                            <a href="<?= site_url('WebController/view_post_by_id/'.$post->id) ?>" class="text-decoration-none text-dark stretched-link">
+                            <a href="<?= site_url('WebController/view_post_by_id/'.$post->slug) ?>" class="text-decoration-none text-dark stretched-link">
                             <?php
                             $content = strip_tags($post->post_title);
                             $short = strlen($content) > 100 ? substr($content, 0, 70) . '...' : $content;

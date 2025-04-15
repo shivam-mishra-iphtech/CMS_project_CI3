@@ -24,6 +24,8 @@ class WebController extends CI_Controller
         // Load required models if not autoloaded
         $this->load->model('UserModel');
 
+
+
         // Get banners where banner_type = 'Main Banner'
         $data['main_banners'] = $this->UserModel->get_banners_by_type('Main Banner');
 
@@ -315,7 +317,7 @@ class WebController extends CI_Controller
         // Load site logo and specific post
         $data['logo'] = $this->UserModel->get_logo('Site Logo');
         $data['latest_post'] = $this->UserModel->get_post_by_id($id);
-        $data['comments'] = $this->UserModel->get_user_post_comment_by($id);
+        $data['comments'] = $this->UserModel->get_user_post_comment_by($data['latest_post']->id);
 
         // Attach user details (image + name) to each comment
         if (!empty($data['comments'])) {
@@ -353,6 +355,8 @@ class WebController extends CI_Controller
         // Get search and category parameters
         $search = $this->input->get('search');
         $category = $this->input->get('category');
+
+        $category_id = $this->input->get('category_id');
 
         // Configure pagination
         $config['base_url'] = site_url('WebController/view_all_post');
@@ -393,7 +397,7 @@ class WebController extends CI_Controller
         $this->pagination->initialize($config);
 
         $page = $this->input->get('page') ? $this->input->get('page') : 0;
-        $data['all_posts'] = $this->UserModel->get_all_post_paginated($config['per_page'], $page, $search, $category);
+        $data['all_posts'] = $this->UserModel->get_all_post_paginated($config['per_page'], $page, $search, $category, $category_id);
         $data['categories'] = $this->UserModel->get_all_categories();
         $data['logo'] = $this->UserModel->get_logo('Site Logo');
         $data['pagination_links'] = $this->pagination->create_links();
@@ -447,11 +451,7 @@ class WebController extends CI_Controller
 
         $this->load->view('web/layouts/blog_search_result', $data);
     }
-    public function view_page()
-    {
 
-        $this->load->view('web/pages');
-    }
     public function add_user_comment()
     {
         if ($this->input->is_ajax_request()) {
@@ -479,5 +479,20 @@ class WebController extends CI_Controller
             show_404(); // or redirect if not AJAX
         }
     }
+
+
+    public function view_page($id)
+    {
+
+        $data['logo'] = $this->UserModel->get_logo('Site Logo');
+
+
+        $data['page'] = $this->UserModel->get_page_by_($id);
+
+
+        $this->load->view('web/pages', $data);
+    }
+
+
 
 }

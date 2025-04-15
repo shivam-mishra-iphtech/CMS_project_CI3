@@ -78,6 +78,7 @@ class UserModel extends CI_Model {
     }
     public function get_latest_post()
     {
+        $this->db->limit(3);
         $this->db->where('category','1');
         $this->db->where('status',1);
         $this->db->order_by('id', 'DESC'); 
@@ -87,7 +88,7 @@ class UserModel extends CI_Model {
     
     public function get_post_by_id($id) {
         $this->db->where('status',1);
-        return $this->db->where('id', $id)->get('posts')->row();
+        return $this->db->where('slug', $id)->get('posts')->row();
     }
     public function get_all_post() {
         return $this->db->where('status', 1)
@@ -125,29 +126,40 @@ class UserModel extends CI_Model {
        return $this->db->insert('user_coments', $data);
     }
     
-    public function get_all_post_paginated($limit, $offset, $search = null, $category = null)
-{
-    $this->db->select('posts.*');
-    $this->db->from('posts');
-    $this->db->order_by('created_at', 'DESC');
-    
-    if (!empty($search)) {
-        $this->db->group_start();
-        $this->db->like('posts.post_title', $search);
-        $this->db->or_like('posts.content', $search);
-        $this->db->or_like('posts.created_at', $search);
-        $this->db->or_like('posts.updated_at', $search);
-        $this->db->group_end();
+    public function get_all_post_paginated($limit, $offset, $search = null, $category = null, $category_id = null)
+    {
+        $this->db->select('posts.*');
+        $this->db->from('posts');
+
+        // Join category table if needed
+        if (!empty($category)) {
+            $this->db->join('post_category', 'post_category.id = posts.category');
+            $this->db->where('post_category.category_name', $category);
+        }
+
+        // Filter by category ID
+        if (!empty($category_id)) {
+            $this->db->where('posts.category', $category_id);
+        }
+
+        // Search condition
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('posts.post_title', $search);
+            $this->db->or_like('posts.content', $search);
+            $this->db->or_like('posts.created_at', $search);
+            $this->db->or_like('posts.updated_at', $search);
+            $this->db->group_end();
+        }
+
+        // Pagination
+        $this->db->order_by('posts.created_at', 'DESC');
+        $this->db->limit($limit, $offset);
+
+        // Execute and return results
+        return $this->db->get()->result();
     }
-    
-    if (!empty($category)) {
-        $this->db->join('post_category', 'post_category.id = posts.category');
-        $this->db->where('post_category.category_name', $category);
-    }
-    
-    $this->db->limit($limit, $offset);
-    return $this->db->get()->result();
-}
+
 
 public function get_post_count($search = null, $category = null)
 {
@@ -167,7 +179,44 @@ public function get_post_count($search = null, $category = null)
     
     return $this->db->count_all_results();
 }
-   
+
+public function get_menu_with_submenus() {
+    // Get all parent menus
+    $this->db->where('parent_id', 0);
+    // $this->db->where('menu_position', 'header');
+    $this->db->where('is_active', 1);
+    $this->db->order_by('sort_order', 'ASC');
+    $menus = $this->db->get('menu_items')->result();
+    
+    // Get submenus for each menu
+    foreach ($menus as $menu) {
+        $this->db->where('parent_id', $menu->id);
+        $this->db->where('is_active', 1);
+        $this->db->order_by('sort_order', 'ASC');
+        $menu->submenus = $this->db->get('menu_items')->result();
+        
+        // Get nested submenus (second level)
+        foreach ($menu->submenus as $submenu) {
+            $this->db->where('parent_id', $submenu->id);
+            $this->db->where('is_active', 1);
+            $this->db->order_by('sort_order', 'ASC');
+            $submenu->submenus = $this->db->get('menu_items')->result();
+        }
+    }
+    
+    return $menus;
+}
+public function get_menus_by_position($position) {
+    $this->db->where('menu_position', $position);
+    $this->db->where('is_active', 1);
+    $this->db->order_by('sort_order', 'ASC');
+    return $this->db->get('menu_items')->result();
+}
+
+public function get_page_by_($slug){
+    $this->db->where('slug' , $slug);
+    return $this->db->get('pages')->row();
+}
 
        
     

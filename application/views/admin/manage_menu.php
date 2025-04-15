@@ -1,4 +1,9 @@
-<?php include 'layouts/sidebar.php'; ?>
+<?php include 'layouts/sidebar.php'; //echo"<pre>";
+
+// print_r($categories);
+
+?>
+
 <style>
     .select2-container .select2-selection--single {
         height: 38px;
@@ -17,6 +22,21 @@
     .link-type-section {
         display: none;
         margin-top: 10px;
+    }
+    .submenu-item {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    .remove-submenu {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: #dc3545;
+        cursor: pointer;
     }
 </style>
 
@@ -49,7 +69,8 @@
 
                         <div class="mb-3">
                             <label for="menu_position" class="form-label">Menu Position</label>
-                            <select name="menu_position" id="menu_position" class="form-select">
+                            <select name="menu_position" id="menu_position" class="form-select" required>
+                                <option value="">Select Position</option>
                                 <option value="header">Header Menu</option>
                                 <option value="footer">Footer Menu</option>
                             </select>
@@ -57,67 +78,29 @@
 
                         <div class="mb-3">
                             <label for="menu_name" class="form-label">Menu Name</label>
-                            <input type="text" class="form-control" name="menu_name" id="menu_name" placeholder="Enter Menu Name">
+                            <input type="text" class="form-control" name="menu_name" id="menu_name" placeholder="Enter Menu Name" required>
                         </div>
 
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="has_submenu">
-                            <label class="form-check-label" for="has_submenu">Add Sub-Menu</label>
+                            <input type="checkbox" class="form-check-input" id="has_submenu" name="has_submenu">
+                            <label class="form-check-label" for="has_submenu">Has Sub-Menu Items</label>
                         </div>
 
-                        <!-- Submenu Section (hidden by default) -->
-                        <div id="submenuSection" class="submenu-section mb-3">
-                            <div class="mb-3">
-                                <label for="sub_menu_name" class="form-label">Sub Menu Name</label>
-                                <input type="text" name="sub_menu_name" class="form-control" id="sub_menu_name" placeholder="Enter Sub Menu Name">
+                        <!-- Submenu Items Container -->
+                        <div id="submenuItemsContainer" class="mb-3" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Submenu Items</h6>
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="addSubmenuBtn">
+                                    <i class="bi bi-plus"></i> Add Submenu
+                                </button>
                             </div>
                             
-                            <div class="mb-3">
-                                <label for="submenu_link_type" class="form-label">Link Type</label>
-                                <select class="form-select" name="submenu_link_type" id="submenu_link_type">
-                                    <option value="">Select Link Type</option>
-                                    <option value="page">Page</option>
-                                    <option value="post">Post</option>
-                                    <option value="post_category">Post Category</option>
-                                    <option value="custom">Custom URL</option>
-                                </select>
-                            </div>
-                            
-                            <!-- Submenu Link Sections -->
-                            <div id="submenu_page_link" class="link-type-section">
-                                <label for="submenu_page_select" class="form-label">Select Page</label>
-                                <select class="form-select" name="submenu_page_select" id="submenu_page_select">
-                                    <?php foreach($pages as $page): ?>
-                                        <option value="<?= $page->id ?>"><?= $page->title ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div id="submenu_post_link" class="link-type-section">
-                                <label for="submenu_post_select" class="form-label">Select Post</label>
-                                <select class="form-select" name="submenu_post_select" id="submenu_post_select">
-                                    <?php foreach($posts as $post): ?>
-                                        <option value="<?= $post->id ?>"><?= $post->title ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div id="submenu_category_link" class="link-type-section">
-                                <label for="submenu_category_select" class="form-label">Select Category</label>
-                                <select class="form-select" name="submenu_category_select" id="submenu_category_select">
-                                    <?php foreach($categories as $category): ?>
-                                        <option value="<?= $category->id ?>"><?= $category->name ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div id="submenu_custom_link" class="link-type-section">
-                                <label for="submenu_custom_url" class="form-label">Custom URL</label>
-                                <input type="text" name="submenu_custom_url" class="form-control" id="submenu_custom_url" placeholder="Enter URL (e.g. https://example.com)">
+                            <div id="submenuItemsList">
+                                <!-- Submenu items will be added here dynamically -->
                             </div>
                         </div>
 
-                        <!-- Main Menu Link Section -->
+                        <!-- Main Menu Link Section (shown when no submenus) -->
                         <div id="mainLinkSection">
                             <div class="mb-3">
                                 <label for="main_link_type" class="form-label">Link Type</label>
@@ -135,7 +118,7 @@
                                 <label for="main_page_select" class="form-label">Select Page</label>
                                 <select class="form-select" name="main_page_select" id="main_page_select">
                                     <?php foreach($pages as $page): ?>
-                                        <option value="<?= $page->id ?>"><?= $page->title ?></option>
+                                        <option value="<?= $page->slug ?>"><?= $page->page_title ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -144,16 +127,16 @@
                                 <label for="main_post_select" class="form-label">Select Post</label>
                                 <select class="form-select" name="main_post_select" id="main_post_select">
                                     <?php foreach($posts as $post): ?>
-                                        <option value="<?= $post->id ?>"><?= $post->title ?></option>
+                                        <option value="<?= $post->slug ?>"><?= $post->post_title ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             
-                            <div id="main_category_link" class="link-type-section">
+                            <div id="main_post_category_link" class="link-type-section">
                                 <label for="main_category_select" class="form-label">Select Category</label>
-                                <select class="form-select" name="main_category_select" id="main_category_select">
+                                <select class="form-select" name="main_category_select" id="main_post_category_select">
                                     <?php foreach($categories as $category): ?>
-                                        <option value="<?= $category->id ?>"><?= $category->name ?></option>
+                                        <option value="<?= $category->id ?>"><?= $category->category_name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -198,6 +181,7 @@
                                         <th>Menu Name</th>
                                         <th>Position</th>
                                         <th>URL</th>
+                                        <th>Link Type</th>
                                         <th width="15%" class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -213,7 +197,7 @@
                                                             <?php foreach($menu->submenus as $submenu): ?>
                                                                 <li class="ps-3">
                                                                     <i class="bi bi-arrow-return-right me-1"></i>
-                                                                    <?= $submenu->sub_menu_name ?>
+                                                                    <?= $submenu->menu_name ?>
                                                                 </li>
                                                             <?php endforeach; ?>
                                                         </ul>
@@ -233,13 +217,16 @@
                                                         </ul>
                                                     <?php endif; ?>
                                                 </td>
+                                                <td><?= ucfirst($menu->link_type) ?></td>
                                                 <td class="text-center">
                                                     <button class="btn btn-sm btn-outline-primary me-1 edit-btn" 
                                                             data-id="<?= $menu->id ?>"
                                                             data-menu-name="<?= $menu->menu_name ?>"
                                                             data-position="<?= $menu->menu_position ?>"
                                                             data-link-type="<?= $menu->link_type ?>"
-                                                            >
+                                                            data-object-id="<?= $menu->object_id ?>"
+                                                            data-url="<?= $menu->url ?>"
+                                                            data-has-submenu="<?= !empty($menu->submenus) ? '1' : '0' ?>">
                                                         <i class="bi bi-pencil"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $menu->id ?>">
@@ -250,7 +237,7 @@
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr>
-                                            <td colspan="5" class="text-center py-4">No menu items found</td>
+                                            <td colspan="6" class="text-center py-4">No menu items found</td>
                                         </tr>
                                     <?php endif; ?>
                                 </tbody>
@@ -282,6 +269,55 @@
     </div>
 </div>
 
+<!-- Submenu Item Template (hidden) -->
+<div id="submenuItemTemplate" style="display: none;">
+    <div class="submenu-item">
+        <span class="remove-submenu"><i class="bi bi-x-circle"></i></span>
+        <div class="mb-2">
+            <label class="form-label">Submenu Name</label>
+            <input type="text" class="form-control submenu-name" name="submenu_names[]" placeholder="Enter Submenu Name" required>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Link Type</label>
+            <select class="form-select submenu-link-type" name="submenu_link_types[]">
+                <option value="">Select Link Type</option>
+                <option value="page">Page</option>
+                <option value="post">Post</option>
+                <option value="post_category">Post Category</option>
+                <option value="custom">Custom URL</option>
+            </select>
+        </div>
+        <div class="submenu-page-link link-type-section">
+            <label class="form-label">Select Page</label>
+            <select class="form-select submenu-page-select" name="submenu_page_selects[]">
+                <?php foreach($pages as $page): ?>
+                    <option value="<?= $page->slug ?>"><?= $page->page_title ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="submenu-post-link link-type-section">
+            <label class="form-label">Select Post</label>
+            <select class="form-select submenu-post-select" name="submenu_post_selects[]">
+                <?php foreach($posts as $post): ?>
+                    <option value="<?= $post->slug ?>"><?= $post->post_title ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="submenu-post_category-link link-type-section">
+            <label class="form-label">Select Category</label>
+            <select class="form-select submenu-post_category-select" name="submenu_category_selects[]">
+                <?php foreach($categories as $category): ?>
+                    <option value="<?= $category->id ?>"><?= $category->category_name ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="submenu-custom-link link-type-section">
+            <label class="form-label">Custom URL</label>
+            <input type="text" class="form-control submenu-custom-url" name="submenu_custom_urls[]" placeholder="Enter URL (e.g. https://example.com)">
+        </div>
+    </div>
+</div>
+
 <?php include 'layouts/footer.php'; ?>
 
 <script>
@@ -292,20 +328,11 @@
         // Toggle submenu section
         $('#has_submenu').change(function() {
             if($(this).is(':checked')) {
-                $('#submenuSection').show();
+                $('#submenuItemsContainer').show();
                 $('#mainLinkSection').hide();
             } else {
-                $('#submenuSection').hide();
+                $('#submenuItemsContainer').hide();
                 $('#mainLinkSection').show();
-            }
-        });
-        
-        // Handle submenu link type change
-        $('#submenu_link_type').change(function() {
-            $('.link-type-section').hide();
-            const selectedType = $(this).val();
-            if(selectedType) {
-                $('#submenu_' + selectedType + '_link').show();
             }
         });
         
@@ -314,8 +341,30 @@
             $('.link-type-section').hide();
             const selectedType = $(this).val();
             if(selectedType) {
+                // alert(selectedType)
                 $('#main_' + selectedType + '_link').show();
             }
+        });
+        
+        // Add new submenu item
+        $('#addSubmenuBtn').click(function() {
+            const newItem = $('#submenuItemTemplate').html();
+            $('#submenuItemsList').append(newItem);
+        });
+        
+        // Handle submenu link type change (delegated event)
+        $(document).on('change', '.submenu-link-type', function() {
+            const container = $(this).closest('.submenu-item');
+            container.find('.link-type-section').hide();
+            const selectedType = $(this).val();
+            if(selectedType) {
+                container.find('.submenu-' + selectedType + '-link').show();
+            }
+        });
+        
+        // Remove submenu item
+        $(document).on('click', '.remove-submenu', function() {
+            $(this).closest('.submenu-item').remove();
         });
         
         // Filter menu items by position
@@ -335,28 +384,121 @@
             }
         });
         
+        // Form submission
+        $('#menuForm').submit(function(e) {
+            e.preventDefault();
+            
+            const formData = $(this).serialize();
+            
+            // Validate form
+            if(!$('#menu_position').val()) {
+                alert('Please select menu position');
+                return;
+            }
+            
+            if(!$('#menu_name').val()) {
+                alert('Please enter menu name');
+                return;
+            }
+            
+            // Submit via AJAX
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if(response.success) {
+                        alert('Menu saved successfully');
+                        window.location.reload();
+                    } else {
+                        alert('Error: ' + (response.message || 'Failed to save menu'));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred while saving the menu: ' + error);
+                }
+            });
+        });
+        
         // Edit button click handler
         $('.edit-btn').click(function() {
             const id = $(this).data('id');
             const menuName = $(this).data('menu-name');
             const position = $(this).data('position');
             const linkType = $(this).data('link-type');
-            const linkValue = $(this).data('link-value');
+            const objectId = $(this).data('object-id');
+            const url = $(this).data('url');
+            const hasSubmenu = $(this).data('has-submenu');
+            
+            resetForm();
             
             $('#menu_id').val(id);
             $('#menu_name').val(menuName);
             $('#menu_position').val(position);
             
-            // Check if it has submenus (you'll need to implement this logic based on your data)
-            // For now, we'll assume it's a main menu item
-            $('#has_submenu').prop('checked', false).trigger('change');
-            $('#main_link_type').val(linkType).trigger('change');
-            
-            // Set the appropriate link value based on type
-            if(linkType === 'custom') {
-                $('#main_custom_url').val(linkValue);
+            // Check if it has submenus
+            if(hasSubmenu == '1') {
+                $('#has_submenu').prop('checked', true).trigger('change');
+                // Load submenu items via AJAX
+                $.ajax({
+                    url: '<?= site_url('AdminController/get_menu_submenus') ?>',
+                    type: 'POST',
+                    data: { menu_id: id },
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.success && response.submenus.length > 0) {
+                            $('#submenuItemsList').empty();
+                            response.submenus.forEach(function(submenu) {
+                                const newItem = $('#submenuItemTemplate').html();
+                                $('#submenuItemsList').append(newItem);
+                                
+                                const lastItem = $('#submenuItemsList .submenu-item').last();
+                                lastItem.find('.submenu-name').val(submenu.menu_name);
+                                lastItem.find('.submenu-link-type').val(submenu.link_type).trigger('change');
+                                
+                                switch(submenu.link_type) {
+                                    case 'page':
+                                        lastItem.find('.submenu-page-select').val(submenu.object_id);
+                                        break;
+                                    case 'post':
+                                        lastItem.find('.submenu-post-select').val(submenu.object_id);
+                                        break;
+                                    case 'post_category':
+                                        lastItem.find('.submenu-category-select').val(submenu.object_id);
+                                        break;
+                                    case 'custom':
+                                        lastItem.find('.submenu-custom-url').val(submenu.url);
+                                        break;
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Failed to load submenu items');
+                    }
+                });
             } else {
-                $('#main_' + linkType + '_select').val(linkValue);
+                $('#main_link_type').val(linkType).trigger('change');
+
+
+               
+                
+                // Set the appropriate link value based on type
+                switch(linkType) {
+                    case 'page':
+                        $('#main_page_select').val(objectId);
+                        break;
+                    case 'post':
+                        $('#main_post_select').val(objectId);
+                        break;
+                    case 'post_category':
+                        $('#main_category_select').val(objectId);
+                        break;
+                    case 'custom':
+                        $('#main_custom_url').val(url);
+                        break;
+                }
             }
             
             // Scroll to the form
@@ -378,12 +520,17 @@
                     url: '<?= site_url('AdminController/delete_menu') ?>',
                     type: 'POST',
                     data: { id: menuToDelete },
+                    dataType: 'json',
                     success: function(response) {
                         if(response.success) {
-                            location.reload();
+                            alert('Menu deleted successfully');
+                            window.location.reload();
                         } else {
-                            alert('Error deleting menu item');
+                            alert('Error: ' + (response.message || 'Failed to delete menu'));
                         }
+                    },
+                    error: function(xhr) {
+                        alert('An error occurred while deleting the menu');
                     }
                 });
             }
@@ -395,8 +542,9 @@
         $('#menuForm')[0].reset();
         $('#menu_id').val('');
         $('.link-type-section').hide();
-        $('#submenuSection').hide();
+        $('#submenuItemsContainer').hide();
         $('#mainLinkSection').show();
         $('#has_submenu').prop('checked', false);
+        $('#submenuItemsList').empty();
     }
 </script>
