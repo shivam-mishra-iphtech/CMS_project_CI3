@@ -50,11 +50,7 @@
     <section class="py-5">
         <div class="container">
             <div class="row align-items-center g-2">
-                <div class="col-md-5">
-                    <!-- <img src="<?= base_url('public/pageImages/' . $page->image_2)?>" 
-                         alt="Our Story" 
-                         class="img-fluid rounded-3 img-hover shadow"> -->
-                </div>
+                
                 <div class="col-md-12">
                     <h2 class="text-primary mb-4">Our Story</h2>
                     <div class="lead animate__animated animate__fadeIn"><?= json_decode($page->page_content)?></div>
@@ -71,9 +67,13 @@
                     <img src="<?= base_url('public/pageImages/' . $page->image_1)?>" 
                          alt="Our Work" 
                          class="img-fluid rounded-3 img-hover shadow">
+                         
                 </div>
                 <div class="col-md-6 order-md-1">
                     <h2 class="text-primary mb-4">What We Do</h2>
+                    <img src="<?= base_url('public/pageImages/' . $page->image_2)?>" 
+                         alt="Our Story" 
+                         class="img-fluid rounded-3 img-hover shadow">
                     <p>We specialize in creating innovative digital solutions that transform businesses and enhance user experiences.</p>
                 </div>
             </div>
