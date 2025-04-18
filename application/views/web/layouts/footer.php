@@ -21,6 +21,161 @@
     <button type="button" class="close" onclick="closeAlert('#alert-message-ajax')" aria-label="Close" style="background: none; border: none; font-size: 20px; font-weight: bold; 
                    cursor: pointer; color: inherit;">&times;</button>
 </div>
+<!-- Page Loader -->
+<div id="loader-wrapper">
+    <div id="loader"></div>
+<!-- </div>
+<style>
+/* Loader Wrapper */
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff; /* background color */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Actual Loader Animation */
+#loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db; /* loader color */
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+}
+
+/* Animation Keyframes */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+<script>
+window.addEventListener("load", function(){
+    const loaderWrapper = document.getElementById("loader-wrapper");
+    loaderWrapper.style.opacity = "0";
+    loaderWrapper.style.visibility = "hidden";
+    loaderWrapper.style.transition = "all 0.5s ease-out";
+});
+</script> -->
+<div class="page-loader">
+  <div class="loader-content">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Loading</div>
+    <div class="loader-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</div>
+<style>
+   /* Page Loader Styles */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-content {
+  text-align: center;
+  max-width: 200px;
+}
+
+.loader-spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #4a6cf7;
+  animation: spin 1s linear infinite;
+}
+
+.loader-text {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.loader-dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.loader-dots .dot {
+  width: 8px;
+  height: 8px;
+  background: #4a6cf7;
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.loader-dots .dot:nth-child(1) {
+  animation: pulse 1.4s infinite ease-in-out;
+}
+.loader-dots .dot:nth-child(2) {
+  animation: pulse 1.4s infinite ease-in-out 0.2s;
+}
+.loader-dots .dot:nth-child(3) {
+  animation: pulse 1.4s infinite ease-in-out 0.4s;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+
+/* Hide when complete */
+.page-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+</style>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+  const loader = document.querySelector('.page-loader');
+  
+  // Show loader immediately
+  loader.classList.remove('hidden');
+  
+  // Hide loader when page is fully loaded
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loader.classList.add('hidden');
+    }, 500); // Small delay for smooth transition
+  });
+  
+  // Fallback in case load event doesn't fire
+  setTimeout(function() {
+    loader.classList.add('hidden');
+  }, 3000); // Maximum 3 seconds
+});
+</script>
+
 
 <!-- Footer -->
 <footer class="text-center text-lg-start bg-light text-muted">

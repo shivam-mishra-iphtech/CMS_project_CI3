@@ -532,29 +532,18 @@
                 </div>
             </div>
 
-            <div class="mt-5" data-aos="fade-up" data-aos-delay="500">
-                <div class="d-flex flex-wrap justify-content-center align-items-center gap-4">
-                    <img src="https://via.placeholder.com/150x60?text=TechCrunch" alt="TechCrunch" class="img-fluid"
-                        style="filter: brightness(0) invert(1); opacity: 0.8;">
-                    <img src="https://via.placeholder.com/150x60?text=Forbes" alt="Forbes" class="img-fluid"
-                        style="filter: brightness(0) invert(1); opacity: 0.8;">
-                    <img src="https://via.placeholder.com/150x60?text=WSJ" alt="Wall Street Journal" class="img-fluid"
-                        style="filter: brightness(0) invert(1); opacity: 0.8;">
-                    <img src="https://via.placeholder.com/150x60?text=Bloomberg" alt="Bloomberg" class="img-fluid"
-                        style="filter: brightness(0) invert(1); opacity: 0.8;">
-                </div>
-            </div>
+            
         </div>
 
         <!-- Floating elements for decoration -->
-        <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none;">
+        <!-- <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="pointer-events: none;">
             <div class="position-absolute rounded-circle bg-white opacity-10"
                 style="width: 300px; height: 300px; top: -50px; left: -50px;"></div>
             <div class="position-absolute rounded-circle bg-white opacity-10 floating-animation"
                 style="width: 200px; height: 200px; top: 20%; right: 10%; animation-delay: 0.5s;"></div>
             <div class="position-absolute rounded-circle bg-white opacity-10 floating-animation"
                 style="width: 150px; height: 150px; bottom: 10%; left: 20%; animation-delay: 1s;"></div>
-        </div>
+        </div> -->
     </div>
 </section>
 
