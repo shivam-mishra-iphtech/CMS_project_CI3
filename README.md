@@ -31,37 +31,38 @@
   </tr>
   <tr>
     <td align="center">
-      <img src="https://snipboard.io/wcePIM.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/wcePIM.jpg" width="400" height="200" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/wcePIM.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/ptsZVI.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/ptsZVI.jpg" width="400" height="200" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/ptsZVI.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/Oq3lTs.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/Oq3lTs.jpg" width="400" height="200" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/Oq3lTs.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/38x2WG.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/38x2WG.jpg" width="400" height="200" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/38x2WG.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/5ilpYU.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/5ilpYU.jpg" width="400" height="300" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/5ilpYU.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/UGK06H.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <img src="https://snipboard.io/UGK06H.jpg" width="400" height="300" style="object-fit: contain; display: block;" />
       <br />
       <a href="https://snipboard.io/UGK06H.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
   </tr>
 </table>
+
 
 
 ---
