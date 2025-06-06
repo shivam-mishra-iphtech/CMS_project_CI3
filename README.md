@@ -22,50 +22,40 @@
 
 ## ✨ Live Preview
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1l-E6lnAdx9Nfkog8AnSNnslfLGMlcPyD/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1l-E6lnAdx9Nfkog8AnSNnslfLGMlcPyD&sz=w200" width="150"><br>
-          <b>Login Page</b>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1SzEDDVwPDM1QkEgQ6UfvGGlYX2a1qhxC/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1SzEDDVwPDM1QkEgQ6UfvGGlYX2a1qhxC&sz=w200" width="150"><br>
-          <b>Admin Dashboard</b>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1zgS-KqJogf6h591KBJH97heYptuDfPOD/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1zgS-KqJogf6h591KBJH97heYptuDfPOD&sz=w200" width="150"><br>
-          <b>Page Editor</b>
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1ch5YfR9UDXAlVEXhqQ2t9vmm7EhNfF9E/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1ch5YfR9UDXAlVEXhqQ2t9vmm7EhNfF9E&sz=w200" width="150"><br>
-          <b>Registration</b>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1W9F8FghP9Ub2C7RBzmmKAF-DSgc4ZaLM/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1W9F8FghP9Ub2C7RBzmmKAF-DSgc4ZaLM&sz=w200" width="150"><br>
-          <b>Page List</b>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://drive.google.com/file/d/1mfCYaJaHrnjf5ersc2eUmqBo5Yz4ZwPJ/view?usp=drive_link">
-          <img src="https://drive.google.com/thumbnail?id=1mfCYaJaHrnjf5ersc2eUmqBo5Yz4ZwPJ&sz=w200" width="150"><br>
-          <b>Media Manager</b>
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
+<h2>📸 Project Screenshots</h2>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://snipboard.io/wcePIM.jpg" alt="Admin Dashboard" width="400" height="500"><br/>
+      <strong>Admin Dashboard</strong>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/ptsZVI.jpg" alt="Page List" width="400" height="500"><br/>
+      <strong>Page List</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://snipboard.io/Oq3lTs.jpg" alt="Edit Page Form" width="400" height="500"><br/>
+      <strong>Edit Page Form</strong>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/38x2WG.jpg" alt="Media Files" width="400" height="500"><br/>
+      <strong>Media Files</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://snipboard.io/5ilpYU.jpg" alt="User Home Page" width="400" height="500"><br/>
+      <strong>User Home Page</strong>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/UGK06H.jpg" alt="Blog List Page" width="400" height="500"><br/>
+      <strong>Blog List Page</strong>
+    </td>
+  </tr>
+</table>
 
 ---
 
