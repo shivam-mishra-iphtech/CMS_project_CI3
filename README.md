@@ -20,42 +20,49 @@
 
 ---
 
-## ✨ Live Preview
-
-<h2>📸 Project Screenshots</h2>
-
 <table>
   <tr>
-    <td align="center">
-      <img src="https://snipboard.io/wcePIM.jpg" alt="Admin Dashboard" width="400" height="500"><br/>
-      <strong>Admin Dashboard</strong>
-    </td>
-    <td align="center">
-      <img src="https://snipboard.io/ptsZVI.jpg" alt="Page List" width="400" height="500"><br/>
-      <strong>Page List</strong>
-    </td>
+    <th>Admin Dashboard</th>
+    <th>Page List</th>
+    <th>Edit Page Form</th>
+    <th>Media Files</th>
+    <th>User Home Page</th>
+    <th>Blog List Page</th>
   </tr>
   <tr>
     <td align="center">
-      <img src="https://snipboard.io/Oq3lTs.jpg" alt="Edit Page Form" width="400" height="500"><br/>
-      <strong>Edit Page Form</strong>
+      <img src="https://snipboard.io/wcePIM.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/wcePIM.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/38x2WG.jpg" alt="Media Files" width="400" height="500"><br/>
-      <strong>Media Files</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="https://snipboard.io/5ilpYU.jpg" alt="User Home Page" width="400" height="500"><br/>
-      <strong>User Home Page</strong>
+      <img src="https://snipboard.io/ptsZVI.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/ptsZVI.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
     <td align="center">
-      <img src="https://snipboard.io/UGK06H.jpg" alt="Blog List Page" width="400" height="500"><br/>
-      <strong>Blog List Page</strong>
+      <img src="https://snipboard.io/Oq3lTs.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/Oq3lTs.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/38x2WG.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/38x2WG.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/5ilpYU.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/5ilpYU.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
+    </td>
+    <td align="center">
+      <img src="https://snipboard.io/UGK06H.jpg" width="400" height="500" style="object-fit: contain; display: block;" />
+      <br />
+      <a href="https://snipboard.io/UGK06H.jpg" target="_blank" style="text-decoration: underline; color: #0366d6;">View Full Image</a>
     </td>
   </tr>
 </table>
+
 
 ---
 
